@@ -1,0 +1,4412 @@
+slip1   -     Q1    1Write the definition for a class Cylinder that contains data members radius and height. The class 
+has the following member functions: 
+a. void setradius(float) to set the radius of data member. 
+b. void setheight(float) to set the height of data member. 
+c. float volume( ) to calculate and return the volume of the cylinder. 
+Write a C++ program to create cylinder object and display its volume.
+#include <iostream>
+using namespace std;
+
+class Cylinder {
+private:
+    float radius;
+    float height;
+
+public:
+    // Member function to set the radius of the cylinder
+    void setradius(float r) {
+        radius = r;
+    }
+
+    // Member function to set the height of the cylinder
+    void setheight(float h) {
+        height = h;
+    }
+
+    // Member function to calculate and return the volume of the cylinder
+    float volume() {
+        return 3.14159 * radius * radius * height;
+    }
+};
+
+int main() {
+    // Create an instance of the Cylinder class
+    Cylinder myCylinder;
+
+    // Set the radius and height of the cylinder
+    myCylinder.setradius(3.0); // Example radius
+    myCylinder.setheight(5.0); // Example height
+
+    // Calculate and display the volume of the cylinder
+    cout << "Volume of the cylinder: " << myCylinder.volume() << endl;
+
+    return 0;
+}
+Q 2    Write a C++ program to create a class Array that contains one float array as member. Overload 
+the Unary ++ and -- operators to increase or decrease the value of each element of an array. Use 
+friend function for operator function.
+#include <iostream>
+using namespace std;
+
+class Array {
+private:
+    float arr[5]; // Assuming array size is 5 for demonstration purposes
+
+public:
+    // Constructor to initialize the array elements
+    Array(float values[]) {
+        for (int i = 0; i < 5; ++i) {
+            arr[i] = values[i];
+        }
+    }
+
+    // Overloading the ++ operator to increase the value of each element
+    friend Array& operator++(Array& a) {
+        for (int i = 0; i < 5; ++i) {
+            ++a.arr[i];
+        }
+        return a;
+    }
+
+    // Overloading the -- operator to decrease the value of each element
+    friend Array& operator--(Array& a) {
+        for (int i = 0; i < 5; ++i) {
+            --a.arr[i];
+        }
+        return a;
+    }
+
+    // Function to display the array
+    void display() {
+        for (int i = 0; i < 5; ++i) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    float values[] = {1.1, 2.2, 3.3, 4.4, 5.5};
+    Array arr(values);
+
+    cout << "Original array: ";
+    arr.display();
+
+    // Using the overloaded ++ operator (increment)
+    ++arr;
+    cout << "Array after increment: ";
+    arr.display();
+
+    // Using the overloaded -- operator (decrement)
+    --arr;
+    cout << "Array after decrement: ";
+    arr.display();
+
+    return 0;
+}
+Q 3  .       Write a C++ program to create a class Shape with functions to find area of the shape and display 
+the name of the shape and other essential components of the class. Create derived classes circle, 
+rectangle and trapezoid each having overridden function area and display. Write a suitable 
+program to illustrate Virtual Function.
+#include <iostream>
+#include <string>
+#include <cmath>
+using namespace std;
+
+// Base class Shape
+class Shape {
+protected:
+    string name;
+
+public:
+    Shape(const string& shapeName) : name(shapeName) {}
+
+    // Virtual function to calculate area
+    virtual float area() const = 0;
+
+    // Virtual function to display shape details
+    virtual void display() const {
+        cout << "Shape: " << name << endl;
+    }
+};
+
+// Derived class Circle
+class Circle : public Shape {
+private:
+    float radius;
+
+public:
+    Circle(float r) : Shape("Circle"), radius(r) {}
+
+    // Override area calculation
+    float area() const override {
+        return 3.14159 * radius * radius;
+    }
+
+    // Override display function
+    void display() const override {
+        Shape::display();
+        cout << "Radius: " << radius << endl;
+    }
+};
+
+// Derived class Rectangle
+class Rectangle : public Shape {
+private:
+    float length;
+    float width;
+
+public:
+    Rectangle(float l, float w) : Shape("Rectangle"), length(l), width(w) {}
+
+    // Override area calculation
+    float area() const override {
+        return length * width;
+    }
+
+    // Override display function
+    void display() const override {
+        Shape::display();
+        cout << "Length: " << length << ", Width: " << width << endl;
+    }
+};
+
+// Derived class Trapezoid
+class Trapezoid : public Shape {
+private:
+    float base1;
+    float base2;
+    float height;
+
+public:
+    Trapezoid(float b1, float b2, float h) : Shape("Trapezoid"), base1(b1), base2(b2), height(h) {}
+
+    // Override area calculation
+    float area() const override {
+        return 0.5 * (base1 + base2) * height;
+    }
+
+    // Override display function
+    void display() const override {
+        Shape::display();
+        cout << "Base1: " << base1 << ", Base2: " << base2 << ", Height: " << height << endl;
+    }
+};
+
+// Function to demonstrate virtual function behavior
+void printArea(const Shape& shape) {
+    shape.display();
+    cout << "Area: " << shape.area() << endl << endl;
+}
+
+int main() {
+    Circle c(5.0);
+    Rectangle r(4.0, 6.0);
+    Trapezoid t(3.0, 5.0, 4.0);
+
+    // Demonstrate virtual function behavior
+    printArea(c);
+    printArea(r);
+    printArea(t);
+
+    return 0;
+}
+slip 2     -      Q1.  Write a C++ program to create two classes Rectangle1 and Rectangle2. Compare area of both the 
+rectangles using friend function.
+#include <iostream>
+using namespace std;
+
+// Forward declaration of Rectangle2 class
+class Rectangle2;
+
+// Rectangle1 class
+class Rectangle1 {
+private:
+    float length;
+    float width;
+
+public:
+    Rectangle1(float l, float w) : length(l), width(w) {}
+
+    // Friend function declaration to compare areas
+    friend void compareAreas(const Rectangle1& rect1, const Rectangle2& rect2);
+
+    // Function to calculate area
+    float area() const {
+        return length * width;
+    }
+};
+
+// Rectangle2 class
+class Rectangle2 {
+private:
+    float length;
+    float width;
+
+public:
+    Rectangle2(float l, float w) : length(l), width(w) {}
+
+    // Friend function declaration to compare areas
+    friend void compareAreas(const Rectangle1& rect1, const Rectangle2& rect2);
+
+    // Function to calculate area
+    float area() const {
+        return length * width;
+    }
+};
+
+// Friend function definition to compare areas
+void compareAreas(const Rectangle1& rect1, const Rectangle2& rect2) {
+    float area1 = rect1.area();
+    float area2 = rect2.area();
+
+    if (area1 > area2) {
+        cout << "Area of Rectangle1 is greater than area of Rectangle2." << endl;
+    } else if (area1 < area2) {
+        cout << "Area of Rectangle2 is greater than area of Rectangle1." << endl;
+    } else {
+        cout << "Area of Rectangle1 is equal to area of Rectangle2." << endl;
+    }
+}
+
+int main() {
+    // Creating instances of Rectangle1 and Rectangle2
+    Rectangle1 rect1(2, 5);
+    Rectangle2 rect2(3, 6);
+
+    // Comparing areas
+    compareAreas(rect1, rect2);
+
+    return 0;
+}
+Q2.   A book (ISBN) and CD (data capacity) are both types of media (id, title) objects. A person buys 
+10 media items each of which can be either book or CD. Display the list of all books and CD’s 
+bought. Define the classes and appropriate member functions to accept and display data. Use 
+pointers and concept of polymorphism (Virtual Function)
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Base class Media
+class Media {
+protected:
+    int id;
+    string title;
+public:
+    Media(int id, string title) : id(id), title(title) {}
+    virtual void display() = 0; // Pure virtual function
+};
+
+// Derived class Book
+class Book : public Media {
+    string isbn;
+public:
+    Book(int id, string title, string isbn) : Media(id, title), isbn(isbn) {}
+    void display() override {
+        cout << "Book ID: " << id << ", Title: " << title << ", ISBN: " << isbn << endl;
+    }
+};
+
+// Derived class CD
+class CD : public Media {
+    int data_capacity;
+public:
+    CD(int id, string title, int data_capacity) : Media(id, title), data_capacity(data_capacity) {}
+    void display() override {
+        cout << "CD ID: " << id << ", Title: " << title << ", Data Capacity: " << data_capacity << " MB" << endl;
+    }
+};
+
+int main() {
+    vector<Media*> mediaList;
+
+    // Assume some sample data
+    mediaList.push_back(new Book(1, "Book Title 1", "ISBN123"));
+    mediaList.push_back(new CD(2, "CD Title 1", 700));
+    mediaList.push_back(new Book(3, "Book Title 2", "ISBN456"));
+    mediaList.push_back(new CD(4, "CD Title 2", 650));
+    // Add more items as needed
+
+    // Display all media items
+    cout << "List of Books and CDs Bought:" << endl;
+    for (Media* media : mediaList) {
+        media->display();
+    }
+
+    // Clean up memory
+    for (Media* media : mediaList) {
+        delete media;
+    }
+
+    return 0;
+}
+Q 3.       Write a C++ program to copy the contents of one file to another
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string sourceFileName, destinationFileName;
+    
+    // Get source file name from user
+    cout << "Enter source file name: ";
+    getline(cin, sourceFileName);
+
+    // Open source file
+    ifstream sourceFile(sourceFileName);
+    if (!sourceFile.is_open()) {
+        cerr << "Error: Unable to open source file." << endl;
+        return 1;
+    }
+
+    // Get destination file name from user
+    cout << "Enter destination file name: ";
+    getline(cin, destinationFileName);
+
+    // Open destination file
+    ofstream destinationFile(destinationFileName);
+    if (!destinationFile.is_open()) {
+        cerr << "Error: Unable to open destination file." << endl;
+        return 1;
+    }
+
+    // Copy contents from source to destination
+    char ch;
+    while (sourceFile.get(ch)) {
+        destinationFile.put(ch);
+    }
+
+    // Close files
+    sourceFile.close();
+    destinationFile.close();
+
+    cout << "File copied successfully." << endl;
+
+    return 0;
+}
+slip 3        Q1.Write a C++ program to overload function Volume and find Volume of Cube, Cylinder and 
+Sphere.
+#include<iostream>
+    using namespace std;
+    float vol(int,int);
+    float vol(float);
+    int vol(int);
+     
+    int main()
+    {
+        int r,h,a;
+        float r1;
+        cout<<"Enter radius and height of a cylinder:";
+        cin>>r>>h;
+        cout<<"Enter side of cube:";
+        cin>>a;
+        cout<<"Enter radius of sphere: ";
+        cin>>r1;
+        cout<<"Volume of cylinder is "<<vol(r,h);
+        cout<<"\nVolume of cube is "<<vol(a);
+        cout<<"\nVolume of sphere is "<<vol(r1);
+        return 0;
+    }
+    float vol(int r,int h)
+    {
+        return(3.14*r*r*h);
+    }
+    float vol(float r1)
+    {
+        return((4*3.14*r1*r1*r1)/3);
+    }
+    int vol(int a)
+    {
+        return(a*a*a);
+    }
+Q2.   Write a C++ program with Student as abstract class and create derive classes Engineering, 
+Medicine and Science having data member rollno and name from base class Student. Create 
+objects of the derived classes and access them using array of pointer of base class Student.
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Abstract base class
+class Student {
+protected:
+    int rollno;
+    string name;
+
+public:
+    // Pure virtual function
+    virtual void display() = 0;
+};
+
+// Derived class Engineering
+class Engineering : public Student {
+public:
+    Engineering(int r, string n) {
+        rollno = r;
+        name = n;
+    }
+
+    // Implementation of the display function
+    void display() override {
+        cout << "Engineering Student - Roll No: " << rollno << ", Name: " << name << endl;
+    }
+};
+
+// Derived class Medicine
+class Medicine : public Student {
+public:
+    Medicine(int r, string n) {
+        rollno = r;
+        name = n;
+    }
+
+    // Implementation of the display function
+    void display() override {
+        cout << "Medicine Student - Roll No: " << rollno << ", Name: " << name << endl;
+    }
+};
+
+// Derived class Science
+class Science : public Student {
+public:
+    Science(int r, string n) {
+        rollno = r;
+        name = n;
+    }
+
+    // Implementation of the display function
+    void display() override {
+        cout << "Science Student - Roll No: " << rollno << ", Name: " << name << endl;
+    }
+};
+
+int main() {
+    // Array of pointers to the base class Student
+    Student *students[3];
+
+    // Creating objects of derived classes
+    Engineering eng(101, "John Doe");
+    Medicine med(201, "Jane Smith");
+    Science sci(301, "Alice Johnson");
+
+    // Assigning addresses of objects to array elements
+    students[0] = &eng;
+    students[1] = &med;
+    students[2] = &sci;
+
+    // Accessing and displaying objects using array of pointers
+    for (int i = 0; i < 3; ++i) {
+        students[i]->display();
+    }
+
+    return 0;
+}
+Q3.        Create a class String which contains a character pointer (Use new and delete operator) 
+Write a C++ program to overload following operators 
+a. ! To reverse the case of each alphabet from given string. 
+b. [ ] To print a character present at specified index
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class String {
+private:
+    char *str;
+
+public:
+    // Constructor
+    String(const char *s) {
+        int length = strlen(s);
+        str = new char[length + 1];
+        strcpy(str, s);
+    }
+
+    // Destructor
+    ~String() {
+        delete[] str;
+    }
+
+    // Copy constructor
+    String(const String &s) {
+        int length = strlen(s.str);
+        str = new char[length + 1];
+        strcpy(str, s.str);
+    }
+
+    // Overloaded assignment operator
+    String& operator=(const String &s) {
+        if (this != &s) {
+            delete[] str;
+            int length = strlen(s.str);
+            str = new char[length + 1];
+            strcpy(str, s.str);
+        }
+        return *this;
+    }
+
+    // Overloaded ! operator to reverse the case of each alphabet
+    String operator!() {
+        String temp(*this);
+        for (int i = 0; temp.str[i] != '\0'; i++) {
+            if (isalpha(temp.str[i])) {
+                if (islower(temp.str[i]))
+                    temp.str[i] = toupper(temp.str[i]);
+                else
+                    temp.str[i] = tolower(temp.str[i]);
+            }
+        }
+        return temp;
+    }
+
+    // Overloaded [] operator to print character at specified index
+    char operator[](int index) {
+        if (index >= 0 && index < strlen(str))
+            return str[index];
+        else
+            return '\0'; // Return null character if index is out of bounds
+    }
+
+    // Function to display the string
+    void display() {
+        cout << str << endl;
+    }
+};
+
+int main() {
+    String str1("Hello");
+    String str2 = str1; // Testing copy constructor
+    String str3("WORLD");
+
+    // Display original strings
+    cout << "Original Strings:" << endl;
+    str1.display();
+    str2.display();
+    str3.display();
+
+    // Reverse the case of each alphabet in str1
+    String reversedStr = !str1;
+    cout << "\nAfter reversing case of each alphabet in str1:" << endl;
+    reversedStr.display();
+
+    // Accessing characters using []
+    cout << "\nCharacter at index 2 in str2: " << str2[2] << endl;
+    cout << "Character at index 5 in str3: " << str3[5] << endl;
+    cout << "Character at index 10 in str3: " << str3[10] << endl; // Out of bounds access
+
+    return 0;
+}
+slip 4            Q1.Write a C++ program to print area of circle, square and rectangle using inline function.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class String {
+private:
+    char *str;
+
+public:
+    String(const char *s = "") {
+        str = new char[strlen(s) + 1];
+        strcpy(str, s);
+    }
+
+    // Destructor
+    ~String() {
+        delete[] str;
+    }
+
+    // Copy constructor
+    String(const String &s) {
+        str = new char[strlen(s.str) + 1];
+        strcpy(str, s.str);
+    }
+
+    // Overloading the assignment operator
+    String &operator=(const String &s) {
+        if (this == &s) return *this;
+        delete[] str;
+        str = new char[strlen(s.str) + 1];
+        strcpy(str, s.str);
+        return *this;
+    }
+
+    // Overloading the ! operator to reverse the case of each alphabet
+    String operator!() {
+        String temp(*this);
+        for (int i = 0; temp.str[i] != '\0'; i++) {
+            if (islower(temp.str[i])) {
+                temp.str[i] = toupper(temp.str[i]);
+            } else if (isupper(temp.str[i])) {
+                temp.str[i] = tolower(temp.str[i]);
+            }
+        }
+        return temp;
+    }
+
+    // Overloading the [] operator to print a character present at specified index
+    char operator[](int index) {
+        if (index >= 0 && index < strlen(str)) {
+            return str[index];
+        } else {
+            cerr << "Index out of bounds!" << endl;
+            return '\0';
+        }
+    }
+
+    // Function to display the string
+    void display() {
+        cout << str << endl;
+    }
+};
+
+int main() {
+    String s1("Hello");
+    cout << "Original string: ";
+    s1.display();
+
+    String s2 = !s1; // Using ! operator to reverse the case
+    cout << "String after reversing case: ";
+    s2.display();
+
+    cout << "Character at index 2: " << s1[2] << endl; // Using [] operator
+
+    return 0;
+}
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class String {
+private:
+    char *str;
+
+public:
+    String(const char *s = "") {
+        str = new char[strlen(s) + 1];
+        strcpy(str, s);
+    }
+
+    // Destructor
+    ~String() {
+        delete[] str;
+    }
+
+    // Copy constructor
+    String(const String &s) {
+        str = new char[strlen(s.str) + 1];
+        strcpy(str, s.str);
+    }
+
+    // Overloading the assignment operator
+    String &operator=(const String &s) {
+        if (this == &s) return *this;
+        delete[] str;
+        str = new char[strlen(s.str) + 1];
+        strcpy(str, s.str);
+        return *this;
+    }
+
+    // Overloading the ! operator to reverse the case of each alphabet
+    String operator!() {
+        String temp(*this);
+        for (int i = 0; temp.str[i] != '\0'; i++) {
+            if (islower(temp.str[i])) {
+                temp.str[i] = toupper(temp.str[i]);
+            } else if (isupper(temp.str[i])) {
+                temp.str[i] = tolower(temp.str[i]);
+            }
+        }
+        return temp;
+    }
+
+    // Overloading the [] operator to print a character present at specified index
+    char operator[](int index) {
+        if (index >= 0 && index < strlen(str)) {
+            return str[index];
+        } else {
+            cerr << "Index out of bounds!" << endl;
+            return '\0';
+        }
+    }
+
+    // Function to display the string
+    void display() {
+        cout << str << endl;
+    }
+};
+
+int main() {
+    String s1("Hello");
+    cout << "Original string: ";
+    s1.display();
+
+    String s2 = !s1; // Using ! operator to reverse the case
+    cout << "String after reversing case: ";
+    s2.display();
+
+    cout << "Character at index 2: " << s1[2] << endl; // Using [] operator
+
+    return 0;
+}
+Q2.      Write a C++ program to create a class which contains two dimensional integer array of size m*n 
+Write a member function to display transpose of entered matrix.(Use Dynamic Constructor for 
+allocating memory and Destructor to free memory of an object).
+#include <iostream>
+
+using namespace std;
+
+class Matrix {
+private:
+    int **data;
+    int rows;
+    int cols;
+
+public:
+    // Constructor with dynamic memory allocation
+    Matrix(int m, int n) {
+        rows = m;
+        cols = n;
+        data = new int*[rows];
+        for (int i = 0; i < rows; ++i) {
+            data[i] = new int[cols];
+        }
+    }
+
+    // Destructor to free allocated memory
+    ~Matrix() {
+        for (int i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
+    }
+
+    // Member function to display transpose of the matrix
+    void displayTranspose() {
+        int transpose[cols][rows]; // Transpose matrix
+
+        // Calculating transpose
+        for (int i = 0; i < cols; ++i) {
+            for (int j = 0; j < rows; ++j) {
+                transpose[i][j] = data[j][i];
+            }
+        }
+
+        // Displaying transpose matrix
+        cout << "Transpose of the matrix:" << endl;
+        for (int i = 0; i < cols; ++i) {
+            for (int j = 0; j < rows; ++j) {
+                cout << transpose[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    // Function to set value at a particular location in matrix
+    void setValue(int i, int j, int value) {
+        if (i >= 0 && i < rows && j >= 0 && j < cols) {
+            data[i][j] = value;
+        } else {
+            cout << "Invalid index!" << endl;
+        }
+    }
+};
+
+int main() {
+    int m, n;
+    cout << "Enter number of rows and columns of matrix: ";
+    cin >> m >> n;
+
+    Matrix mat(m, n);
+
+    // Input matrix elements
+    cout << "Enter matrix elements:" << endl;
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int value;
+            cout << "Enter element at position (" << i << ", " << j << "): ";
+            cin >> value;
+            mat.setValue(i, j, value);
+        }
+    }
+
+    // Display transpose of the matrix
+    mat.displayTranspose();
+
+    return 0;
+}
+Q3.     Create a base class Flight containing protected data members as Flight_no, Flight_Name. Derive 
+a class Route(Source, Destination) from class Flight. Also derive a class Reservation (no_seats, 
+class, fare, travel_date) from Route. Write a C++ program to perform the following necessary 
+functions. 
+a. Enter details of n reservations. 
+b. Display reservation details of Business class.
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Flight {
+protected:
+    int Flight_no;
+    string Flight_Name;
+
+public:
+    Flight(int flightNo, const string& flightName) : Flight_no(flightNo), Flight_Name(flightName) {}
+
+    void display() const {
+        cout << "Flight Number: " << Flight_no << endl;
+        cout << "Flight Name: " << Flight_Name << endl;
+    }
+};
+
+class Route : public Flight {
+protected:
+    string Source;
+    string Destination;
+
+public:
+    Route(int flightNo, const string& flightName, const string& source, const string& destination)
+        : Flight(flightNo, flightName), Source(source), Destination(destination) {}
+
+    void display() const {
+        Flight::display();
+        cout << "Source: " << Source << endl;
+        cout << "Destination: " << Destination << endl;
+    }
+};
+
+class Reservation : public Route {
+private:
+    int no_seats;
+    string class_type;
+    double fare;
+    string travel_date;
+
+public:
+    Reservation(int flightNo, const string& flightName, const string& source, const string& destination,
+                int seats, const string& cls, double fare_, const string& date)
+        : Route(flightNo, flightName, source, destination), no_seats(seats), class_type(cls),
+          fare(fare_), travel_date(date) {}
+
+    void display() const {
+        Route::display();
+        cout << "Number of Seats: " << no_seats << endl;
+        cout << "Class: " << class_type << endl;
+        cout << "Fare: " << fare << endl;
+        cout << "Travel Date: " << travel_date << endl;
+    }
+
+    string getClassType() const {
+        return class_type;
+    }
+};
+
+int main() {
+    vector<Reservation> reservations;
+    int n;
+    cout << "Enter number of reservations: ";
+    cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        int flightNo, seats;
+        string flightName, source, destination, cls, date;
+        double fare;
+
+        cout << "Enter details for reservation " << i + 1 << ":" << endl;
+        cout << "Flight Number: ";
+        cin >> flightNo;
+        cin.ignore(); // Ignore newline
+        cout << "Flight Name: ";
+        getline(cin, flightName);
+        cout << "Source: ";
+        getline(cin, source);
+        cout << "Destination: ";
+        getline(cin, destination);
+        cout << "Number of Seats: ";
+        cin >> seats;
+        cout << "Class: ";
+        cin >> cls;
+        cout << "Fare: ";
+        cin >> fare;
+        cout << "Travel Date: ";
+        cin >> date;
+
+        reservations.emplace_back(flightNo, flightName, source, destination, seats, cls, fare, date);
+    }
+
+    // Display reservation details of Business class
+    cout << "\nReservations for Business Class:" << endl;
+    for (const auto& res : reservations) {
+        if (res.getClassType() == "Business") {
+            res.display();
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
+slip 5 -         Q1.Write a C++ program to create a class Mobile which contains data members as Mobile_Id, 
+Mobile_Name, Mobile_Price. Create and Initialize all values of Mobile object by using 
+parameterized constructor. Display the values of Mobile object.
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Mobile {
+private:
+    int Mobile_Id;
+    string Mobile_Name;
+    double Mobile_Price;
+
+public:
+    // Parameterized constructor to initialize all values
+    Mobile(int id, const string& name, double price) : Mobile_Id(id), Mobile_Name(name), Mobile_Price(price) {}
+
+    // Function to display the values of Mobile object
+    void display() const {
+        cout << "Mobile ID: " << Mobile_Id << endl;
+        cout << "Mobile Name: " << Mobile_Name << endl;
+        cout << "Mobile Price: " << Mobile_Price << endl;
+    }
+};
+
+int main() {
+    // Creating a Mobile object and initializing values using parameterized constructor
+    Mobile mobile1(101, "iPhone 13", 999.99);
+
+    // Displaying the values of the Mobile object
+    cout << "Details of Mobile 1:" << endl;
+    mobile1.display();
+
+    return 0;
+}
+Q2    .Create a base class Student (Roll_No, Name) which derives two classes Theory and Practical. 
+Theory class contains marks of five Subjects and Practical class contains marks of two practical 
+subjects. Class Result (Total_Marks, Class) inherits both Theory and Practical classes. (Use 
+concept of Virtual Base Class) Write a menu driven program to perform the following functions: 
+a. Build a master table. 
+b. Display master table.
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Student {
+protected:
+    int Roll_No;
+    string Name;
+
+public:
+    Student(int rollNo, const string& name) : Roll_No(rollNo), Name(name) {}
+    virtual void getData() {
+        cout << "Enter Roll No: ";
+        cin >> Roll_No;
+        cout << "Enter Name: ";
+        cin.ignore(); // Ignore newline
+        getline(cin, Name);
+    }
+    virtual void displayData() const {
+        cout << "Roll No: " << Roll_No << endl;
+        cout << "Name: " << Name << endl;
+    }
+};
+
+class Theory : virtual public Student {
+protected:
+    int marks[5];
+
+public:
+    Theory(int rollNo, const string& name) : Student(rollNo, name) {}
+    void getData() override {
+        Student::getData();
+        cout << "Enter marks for 5 subjects:" << endl;
+        for (int i = 0; i < 5; ++i) {
+            cout << "Subject " << i + 1 << ": ";
+            cin >> marks[i];
+        }
+    }
+    void displayData() const override {
+        Student::displayData();
+        cout << "Theory Marks: ";
+        for (int i = 0; i < 5; ++i) {
+            cout << marks[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+class Practical : virtual public Student {
+protected:
+    int marks[2];
+
+public:
+    Practical(int rollNo, const string& name) : Student(rollNo, name) {}
+    void getData() override {
+        Student::getData();
+        cout << "Enter marks for 2 practical subjects:" << endl;
+        for (int i = 0; i < 2; ++i) {
+            cout << "Practical Subject " << i + 1 << ": ";
+            cin >> marks[i];
+        }
+    }
+    void displayData() const override {
+        Student::displayData();
+        cout << "Practical Marks: ";
+        for (int i = 0; i < 2; ++i) {
+            cout << marks[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+class Result : public Theory, public Practical {
+protected:
+    int Total_Marks;
+    string Class;
+
+public:
+    Result(int rollNo, const string& name) : Student(rollNo, name), Theory(rollNo, name), Practical(rollNo, name) {}
+    void getData() override {
+        Theory::getData();
+        Practical::getData();
+        Total_Marks = 0;
+        for (int i = 0; i < 5; ++i) {
+            Total_Marks += Theory::marks[i];
+        }
+        for (int i = 0; i < 2; ++i) {
+            Total_Marks += Practical::marks[i];
+        }
+        if (Total_Marks >= 350) {
+            Class = "First";
+        } else if (Total_Marks >= 250) {
+            Class = "Second";
+        } else {
+            Class = "Third";
+        }
+    }
+    void displayData() const override {
+        Student::displayData();
+        Theory::displayData();
+        Practical::displayData();
+        cout << "Total Marks: " << Total_Marks << endl;
+        cout << "Class: " << Class << endl;
+    }
+};
+
+int main() {
+    vector<Result> masterTable;
+    int choice;
+
+    do {
+        cout << "\nMenu:\n1. Build a master table\n2. Display master table\n3. Exit\nEnter your choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1: {
+                int n;
+                cout << "Enter number of students: ";
+                cin >> n;
+                for (int i = 0; i < n; ++i) {
+                    Result student(0, "");
+                    cout << "\nEnter details for student " << i + 1 << ":" << endl;
+                    student.getData();
+                    masterTable.push_back(student);
+                }
+                break;
+            }
+            case 2: {
+                cout << "\nMaster Table:" << endl;
+                for (const auto& student : masterTable) {
+                    student.displayData();
+                    cout << endl;
+                }
+                break;
+            }
+            case 3: {
+                cout << "Exiting program.\n";
+                break;
+            }
+            default: {
+                cout << "Invalid choice. Please enter again.\n";
+            }
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+Q3.         Create a class Book containing Book_name, author and Price as a data member and write 
+necessary member functions for the following (use function overloading). 
+a. To Accept and display the Book Information. 
+b. Display book details of a given author 
+c. Display book details of specific price
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Book {
+private:
+    string Book_name;
+    string author;
+    double Price;
+
+public:
+    // Function to accept book information
+    void acceptBookInfo() {
+        cout << "Enter Book Name: ";
+        getline(cin, Book_name);
+        cout << "Enter Author Name: ";
+        getline(cin, author);
+        cout << "Enter Price: ";
+        cin >> Price;
+        cin.ignore(); // Ignore newline character after entering price
+    }
+
+    // Function to display book information
+    void displayBookInfo() const {
+        cout << "Book Name: " << Book_name << endl;
+        cout << "Author: " << author << endl;
+        cout << "Price: " << Price << endl;
+    }
+
+    // Function to display book details of a given author
+    void displayBookByAuthor(const string& givenAuthor) const {
+        if (author == givenAuthor) {
+            displayBookInfo();
+        }
+    }
+
+    // Function to display book details of a specific price
+    void displayBookByPrice(double givenPrice) const {
+        if (Price == givenPrice) {
+            displayBookInfo();
+        }
+    }
+};
+
+int main() {
+    Book book1, book2, book3;
+
+    cout << "Enter details for Book 1:" << endl;
+    book1.acceptBookInfo();
+
+    cout << "\nEnter details for Book 2:" << endl;
+    book2.acceptBookInfo();
+
+    cout << "\nEnter details for Book 3:" << endl;
+    book3.acceptBookInfo();
+
+    cout << "\nDisplaying details of all books:" << endl;
+    book1.displayBookInfo();
+    book2.displayBookInfo();
+    book3.displayBookInfo();
+
+    string author;
+    cout << "\nEnter author name to display books by that author: ";
+    getline(cin, author);
+
+    cout << "Books by author " << author << ":" << endl;
+    book1.displayBookByAuthor(author);
+    book2.displayBookByAuthor(author);
+    book3.displayBookByAuthor(author);
+
+    double price;
+    cout << "\nEnter price to display books of that price: ";
+    cin >> price;
+    cout << "Books with price $" << price << ":" << endl;
+    book1.displayBookByPrice(price);
+    book2.displayBookByPrice(price);
+    book3.displayBookByPrice(price);
+
+    return 0;
+}
+slip 6  -         Q1.Write a C++ program to implement a class printdata to overload print function as follows: 
+void print(int) - outputs value followed by the value of the integer. 
+Eg. print(10) outputs - value 10 
+void print(char *) – outputs value followed by the string in double quotes. 
+Eg. print(“hi”) outputs value “hi”
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class printdata {
+public:
+    // Overloaded function to print integer value
+    void print(int value) {
+        cout << "value " << value << endl;
+    }
+
+    // Overloaded function to print string value
+    void print(const char* str) {
+        cout << "value \"" << str << "\"" << endl;
+    }
+};
+
+int main() {
+    printdata obj;
+
+    // Call the overloaded print function with an integer argument
+    obj.print(10);
+
+    // Call the overloaded print function with a string argument
+    obj.print("hi");
+
+    return 0;
+}
+Q2.      Write a C++ program to design a class complex to represent complex number. The complex class 
+uses an external function (as a friend function) to add two complex number. The function should 
+return an object of type complex representing the sum of two complex Numbers.
+#include <iostream>
+using namespace std;
+
+class Complex {
+private:
+    double real;
+    double imag;
+
+public:
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+
+    // Friend function to add two complex numbers
+    friend Complex add(const Complex& c1, const Complex& c2);
+
+    // Function to display complex number
+    void display() {
+        cout << real << " + " << imag << "i";
+    }
+};
+
+// Friend function definition to add two complex numbers
+Complex add(const Complex& c1, const Complex& c2) {
+    double realSum = c1.real + c2.real;
+    double imagSum = c1.imag + c2.imag;
+    return Complex(realSum, imagSum);
+}
+
+int main() {
+    Complex c1(3.0, 4.0);
+    Complex c2(1.0, 2.0);
+    Complex result = add(c1, c2);
+
+    cout << "First complex number: ";
+    c1.display();
+    cout << endl;
+
+    cout << "Second complex number: ";
+    c2.display();
+    cout << endl;
+
+    cout << "Sum of the complex numbers: ";
+    result.display();
+    cout << endl;
+
+    return 0;
+}
+Q3.        Design two base classes Employee (Name, Designation) and Project (Project_Id, title). Derive 
+a class Emp_Proj(Duration) from Employee and Project. Write a menu driven program to 
+a. Build a master table. Display a master table 
+b. Display Project details in the ascending order of duration.
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Employee {
+protected:
+    string Name;
+    string Designation;
+
+public:
+    // Function to input data for an employee
+    void getData() {
+        cout << "Enter Employee Name: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, Name);
+        cout << "Enter Employee Designation: ";
+        getline(cin, Designation);
+    }
+
+    // Function to display employee details
+    void displayData() const {
+        cout << "Employee Name: " << Name << endl;
+        cout << "Employee Designation: " << Designation << endl;
+    }
+};
+
+class Project {
+protected:
+    int Project_Id;
+    string Title;
+
+public:
+    // Function to input data for a project
+    void getD…
+slip 7 -         Q1.Write a C++ program using class which contains two data members as type integer. Create and 
+initialize the objects using default constructor, parameterized constructor with default value. 
+Write a member function to display maximum from given two numbers for all objects.
+#include <iostream>
+using namespace std;
+
+class Numbers {
+private:
+    int num1;
+    int num2;
+
+public:
+    // Default constructor
+    Numbers() {
+        num1 = 0;
+        num2 = 0;
+    }
+
+    // Parameterized constructor with default values
+    Numbers(int n1, int n2 = 0) {
+        num1 = n1;
+        num2 = n2;
+    }
+
+    // Function to display maximum of the two numbers
+    void displayMax() {
+        cout << "Maximum of " << num1 << " and " << num2 << " is: " << (num1 > num2 ? num1 : num2) << endl;
+    }
+};
+
+int main() {
+    // Creating objects using default constructor and parameterized constructor with default values
+    Numbers obj1; // Using default constructor
+    Numbers obj2(5); // Using parameterized constructor with default value
+    Numbers obj3(10, 7); // Using parameterized constructor without default value
+
+    // Displaying maximum for all objects
+    cout << "For object 1: ";
+    obj1.displayMax();
+    cout << "For object 2: ";
+    obj2.displayMax();
+    cout << "For object 3: ";
+    obj3.displayMax();
+
+    return 0;
+}
+Krte
+Q2.      Create a class College containing data members as College_Id, College_Name, 
+Establishment_year, University_Name. Write a C++ program with following functions 
+a. Accept n College details 
+b. Display College details of specified University 
+c. Display College details according to Establishment year (Use Array of Objects and 
+Function Overloading).
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class College {
+private:
+    int College_Id;
+    string College_Name;
+    int Establishment_year;
+    string University_Name;
+
+public:
+    // Default constructor
+    College() {}
+
+    // Parameterized constructor
+    College(int id, const string& name, int year, const string& university) 
+        : College_Id(id), College_Name(name), Establishment_year(year), University_Name(university) {}
+
+    // Function to accept College details
+    void acceptDetails() {
+        cout << "Enter College ID: ";
+        cin >> College_Id;
+        cout << "Enter College Name: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, College_Name);
+        cout << "Enter Establishment year: ";
+        cin >> Establishment_year;
+        cout << "Enter University Name: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, University_Name);
+    }
+
+    // Function to display College details
+    void displayDetails() const {
+        cout << "College ID: " << College_Id << endl;
+        cout << "College Name: " << College_Name << endl;
+        cout << "Establishment year: " << Establishment_year << endl;
+        cout << "University Name: " << University_Name << endl;
+    }
+
+    // Function to check if College belongs to specified University
+    bool isFromUniversity(const string& university) const {
+        return University_Name == university;
+    }
+
+    // Function to check if College was established in specified year
+    bool wasEstablishedInYear(int year) const {
+        return Establishment_year == year;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of colleges: ";
+    cin >> n;
+
+    // Array of College objects
+    College colleges[n];
+
+    // Accepting details of n colleges
+    for (int i = 0; i < n; ++i) {
+        cout << "\nEnter details for College " << i + 1 << ":" << endl;
+        colleges[i].acceptDetails();
+    }
+
+    // Displaying College details of specified University
+    string university;
+    cout << "\nEnter the University name to display College details: ";
+    cin.ignore(); // Ignore newline character
+    getline(cin, university);
+
+    cout << "\nColleges belonging to University " << university << ":" << endl;
+    bool foundUniversity = false;
+    for (int i = 0; i < n; ++i) {
+        if (colleges[i].isFromUniversity(university)) {
+            colleges[i].displayDetails();
+            foundUniversity = true;
+        }
+    }
+    if (!foundUniversity) {
+        cout << "No colleges found belonging to University " << university << endl;
+    }
+
+    // Displaying College details according to Establishment year
+    int year;
+    cout << "\nEnter the Establishment year to display College details: ";
+    cin >> year;
+
+    cout << "\nColleges established in the year " << year << ":" << endl;
+    bool foundYear = false;
+    for (int i = 0; i < n; ++i) {
+        if (colleges[i].wasEstablishedInYear(year)) {
+            colleges[i].displayDetails();
+            foundYear = true;
+        }
+    }
+    if (!foundYear) {
+        cout << "No colleges found established in the year " << year << endl;
+    }
+
+    return 0;
+}
+Q3.     Create a class Matrix and Write a C++ program to perform following functions: 
+a. To accept a Matrix 
+b. To display a Matrix 
+c. Overload unary minus ‘–‘ operator to calculate transpose of a Matrix 
+d. Overload binary multiplication '*’ operator to calculate multiplication of two matrices
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Matrix {
+private:
+    int rows;
+    int cols;
+    vector<vector<int>> data;
+
+public:
+    // Constructor to initialize matrix dimensions
+    Matrix(int r, int c) : rows(r), cols(c) {
+        // Resize the vector to store the matrix
+        data.resize(rows, vector<int>(cols));
+    }
+
+    // Function to accept matrix elements
+    void acceptMatrix() {
+        cout << "Enter elements of the matrix:" << endl;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                cout << "Enter element at position (" << i << ", " << j << "): ";
+                cin >> data[i][j];
+            }
+        }
+    }
+
+    // Function to display matrix elements
+    void displayMatrix() const {
+        cout << "Matrix:" << endl;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                cout << data[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    // Overloading unary minus to calculate transpose of a matrix
+    Matrix operator-() const {
+        Matrix transpose(cols, rows);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                transpose.data[j][i] = data[i][j];
+            }
+        }
+        return transpose;
+    }
+
+    // Overloading binary multiplication to calculate multiplication of two matrices
+    Matrix operator*(const Matrix& other) const {
+        if (cols != other.rows) {
+            cout << "Multiplication not possible. Columns of first matrix must be equal to rows of second matrix." << endl;
+            return Matrix(0, 0);
+        }
+
+        Matrix result(rows, other.cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < other.cols; ++j) {
+                for (int k = 0; k < cols; ++k) {
+                    result.data[i][j] += data[i][k] * other.data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+};
+
+int main() {
+    int m, n;
+    cout << "Enter number of rows for matrix A: ";
+    cin >> m;
+    cout << "Enter number of columns for matrix A: ";
+    cin >> n;
+
+    // Create matrix A
+    Matrix A(m, n);
+    A.acceptMatrix();
+
+    // Display matrix A
+    cout << "Matrix A:" << endl;
+    A.displayMatrix();
+
+    // Calculate and display transpose of matrix A
+    Matrix transpose_A = -A;
+    cout << "Transpose of Matrix A:" << endl;
+    transpose_A.displayMatrix();
+
+    int p;
+    cout << "Enter number of columns for matrix B: ";
+    cin >> p;
+
+    // Create matrix B
+    Matrix B(n, p);
+    B.acceptMatrix();
+
+    // Display matrix B
+    cout << "Matrix B:" << endl;
+    B.displayMatrix();
+
+    // Calculate and display multiplication of matrices A and B
+    Matrix mult_AB = A * B;
+    cout << "Multiplication of Matrix A and Matrix B:" << endl;
+    mult_AB.displayMatrix();
+
+    return 0;
+}
+slip 8 -       Q1.Write a C++ program to subtract two integer numbers of two different classes using friend 
+function.
+#include <iostream>
+using namespace std;
+
+// Forward declaration of class B
+class B;
+
+class A {
+private:
+    int numA;
+
+public:
+    A(int a) : numA(a) {}
+
+    // Friend function declaration
+    friend int subtract(const A& objA, const B& objB);
+};
+
+class B {
+private:
+    int numB;
+
+public:
+    B(int b) : numB(b) {}
+
+    // Friend function declaration
+    friend int subtract(const A& objA, const B& objB);
+};
+
+// Friend function definition to subtract numB from numA
+int subtract(const A& objA, const B& objB) {
+    return objA.numA - objB.numB;
+}
+
+int main() {
+    // Create objects of class A and B
+    A objA(10);
+    B objB(5);
+
+    // Subtracting numB from numA using friend function
+    int result = subtract(objA, objB);
+
+    // Displaying the result
+    cout << "Result of subtracting numB from numA: " << result << endl;
+
+    return 0;
+}
+Q2       .Create a class String which contains a character pointer (Use new and delete operator). 
+Write a C++ program to overload following operators: 
+a. ! To reverse the case of each alphabet from given string 
+b. == To check equality of two strings
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class String {
+private:
+    char *str;
+
+public:
+    // Constructor
+    String(const char *s) {
+        int length = strlen(s);
+        str = new char[length + 1];
+        strcpy(str, s);
+    }
+
+    // Destructor
+    ~String() {
+        delete[] str;
+    }
+
+    // Overloading the '!' operator to reverse the case of each alphabet
+    String operator!() {
+        int length = strlen(str);
+        for (int i = 0; i < length; ++i) {
+            if (islower(str[i]))
+                str[i] = toupper(str[i]);
+            else if (isupper(str[i]))
+                str[i] = tolower(str[i]);
+        }
+        return *this;
+    }
+
+    // Overloading the '==' operator to check equality of two strings
+    bool operator==(const String& s) {
+        return strcmp(str, s.str) == 0;
+    }
+
+    // Function to display the string
+    void display() const {
+        cout << str << endl;
+    }
+};
+
+int main() {
+    // Testing overloaded operators
+    String str1("Hello");
+    String str2("WORLD");
+    
+    cout << "Original strings:" << endl;
+    cout << "str1: ";
+    str1.display();
+    cout << "str2: ";
+    str2.display();
+    
+    cout << "\nReversed case of str1: ";
+    (!str1).display();  // Using the '!' operator
+    cout << "Reversed case of str2: ";
+    (!str2).display();  // Using the '!' operator
+    
+    cout << "\nChecking equality of str1 and str2: ";
+    if (str1 == str2)   // Using the '==' operator
+        cout << "Strings are equal" << endl;
+    else
+        cout << "Strings are not equal" << endl;
+    
+    return 0;
+}
+Q3.     Write a C++ program to create a class Date which contains three data members as dd,mm,yyyy. 
+Create and initialize the object by using parameterized constructor and display date in dd-month- 
+yyyy format. (Input: 19-12-2014 Output: 19-Dec-2014) Perform validation for month
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+class Date {
+private:
+    int dd, mm, yyyy;
+
+public:
+    // Parameterized constructor to initialize date
+    Date(int d, int m, int y) : dd(d), mm(m), yyyy(y) {}
+
+    // Function to display date in dd-month-yyyy format
+    void displayDate() {
+        // Array of month names
+        string monthNames[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        // Validate month
+        if (mm < 1 || mm > 12) {
+            cout << "Invalid month!" << endl;
+            return;
+        }
+
+        cout << setfill('0') << setw(2) << dd << "-";
+        cout << monthNames[mm - 1] << "-";
+        cout << setw(4) << yyyy << endl;
+    }
+};
+
+int main() {
+    int day, month, year;
+    cout << "Enter date in the format dd-mm-yyyy: ";
+    char dash;
+    cin >> day >> dash >> month >> dash >> year;
+
+    // Create Date object using parameterized constructor
+    Date date(day, month, year);
+
+    cout << "Date in dd-month-yyyy format: ";
+    date.displayDate();
+
+    return 0;
+}
+slip 9 -  Q1. Write a C++ program to create a class Item with data members Item_code, Item_name, Item_Price. 
+Write member functions to accept and display item information and also display number of objects 
+created for a class. (Use Static data member and Static member function)
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Item {
+private:
+    int Item_code;
+    string Item_name;
+    float Item_Price;
+    static int count; // Static data member to count number of objects
+
+public:
+    // Constructor to initialize data members
+    Item(int code, const string& name, float price) : Item_code(code), Item_name(name), Item_Price(price) {
+        count++; // Increment count when object is created
+    }
+
+    // Member function to accept item information
+    void acceptItem() {
+        cout << "Enter Item Code: ";
+        cin >> Item_code;
+        cout << "Enter Item Name: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, Item_name);
+        cout << "Enter Item Price: ";
+        cin >> Item_Price;
+        count++; // Increment count when information is accepted
+    }
+
+    // Member function to display item information
+    void displayItem() const {
+        cout << "Item Code: " << Item_code << endl;
+        cout << "Item Name: " << Item_name << endl;
+        cout << "Item Price: " << Item_Price << endl;
+    }
+
+    // Static member function to display number of objects created
+    static void displayCount() {
+        cout << "Number of objects created: " << count << endl;
+    }
+};
+
+// Initializing static data member
+int Item::count = 0;
+
+int main() {
+    // Creating objects of class Item
+    Item item1(101, "Product1", 10.5);
+    Item item2(102, "Product2", 20.5);
+    Item item3(103, "Product3", 30.5);
+
+    // Displaying item information
+    cout << "Item 1 Information:" << endl;
+    item1.displayItem();
+    cout << endl;
+
+    cout << "Item 2 Information:" << endl;
+    item2.displayItem();
+    cout << endl;
+
+    cout << "Item 3 Information:" << endl;
+    item3.displayItem();
+    cout << endl;
+
+    // Displaying number of objects created
+    Item::displayCount();
+
+    return 0;
+}
+Q2.     Create a Base class Train containing protected data members as Train_no, Train_Name. Derive a 
+class Route(Route_id, Source, Destination) from Train class. Also derive a class Reservation 
+(Number_of_Seats, Train_Class, Fare, Travel_Date) from Route. Write a C++ program 
+to perform following necessary functions: 
+a. Enter details of n reservations 
+b. Display details of all reservations 
+c. Display reservation details of a specified Train class
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Train {
+protected:
+    int Train_no;
+    string Train_Name;
+
+public:
+    // Constructor to initialize Train details
+    Train(int no, const string& name) : Train_no(no), Train_Name(name) {}
+
+    // Function to display Train details
+    void displayTrain() const {
+        cout << "Train No: " << Train_no << endl;
+        cout << "Train Name: " << Train_Name << endl;
+    }
+};
+
+class Route : public Train {
+protected:
+    int Route_id;
+    string Source;
+    string Destination;
+
+public:
+    // Constructor to initialize Route details
+    Route(int no, const string& name, int id, const string& src, const string& dest)
+        : Train(no, name), Route_id(id), Source(src), Destination(dest) {}
+
+    // Function to display Route details
+    void displayRoute() const {
+        displayTrain();
+        cout << "Route ID: " << Route_id << endl;
+        cout << "Source: " << Source << endl;
+        cout << "Destination: " << Destination << endl;
+    }
+};
+
+class Reservation : public Route {
+private:
+    int Number_of_Seats;
+    string Train_Class;
+    float Fare;
+    string Travel_Date;
+
+public:
+    // Constructor to initialize Reservation details
+    Reservation(int no, const string& name, int id, const string& src, const string& dest,
+                int seats, const string& trainClass, float fare, const string& date)
+        : Route(no, name, id, src, dest), Number_of_Seats(seats), Train_Class(trainClass),
+          Fare(fare), Travel_Date(date) {}
+
+    // Function to display Reservation details
+    void displayReservation() const {
+        displayRoute();
+        cout << "Number of Seats: " << Number_of_Seats << endl;
+        cout << "Train Class: " << Train_Class << endl;
+        cout << "Fare: " << Fare << endl;
+        cout << "Travel Date: " << Travel_Date << endl;
+    }
+
+    // Function to display Reservation details of a specified Train class
+    void displayReservationByClass(const string& trainClass) const {
+        if (Train_Class == trainClass) {
+            displayReservation();
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    vector<Reservation> reservations;
+    int n;
+    cout << "Enter the number of reservations: ";
+    cin >> n;
+
+    // Input details of n reservations
+    for (int i = 0; i < n; ++i) {
+        int trainNo, routeId, seats;
+        string trainName, src, dest, trainClass, date;
+        float fare;
+
+        cout << "\nEnter details for reservation " << i + 1 << ":" << endl;
+        cout << "Train No: ";
+        cin >> trainNo;
+        cout << "Train Name: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, trainName);
+        cout << "Route ID: ";
+        cin >> routeId;
+        cout << "Source: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, src);
+        cout << "Destination: ";
+        getline(cin, dest);
+        cout << "Number of Seats: ";
+        cin >> seats;
+        cout << "Train Class: ";
+        cin.ignore(); // Ignore newline character
+        getline(cin, trainClass);
+        cout << "Fare: ";
+        cin >> fare;
+        cout << "Travel Date: ";
+        cin >> date;
+
+        Reservation res(trainNo, trainName, routeId, src, dest, seats, trainClass, fare, date);
+        reservations.push_back(res);
+    }
+
+    // Display details of all reservations
+    cout << "\nDetails of all reservations:" << endl;
+    for (const auto& res : reservations) {
+        res.displayReservation();
+        cout << endl;
+    }
+
+    // Display reservation details of a specified Train class
+    string specifiedTrainClass;
+    cout << "Enter the train class to display reservations: ";
+    cin.ignore(); // Ignore newline character
+    getline(cin, specifiedTrainClass);
+
+    cout << "\nDetails of reservations for train class " << specifiedTrainClass << ":" << endl;
+    for (const auto& res : reservations) {
+        res.displayReservationByClass(specifiedTrainClass);
+    }
+
+    return 0;
+}
+Q3 .       Create a class Time which contains data members as: Hours, Minutes and Seconds. Write a 
+C++ program to perform following necessary member functions: 
+a. To read time 
+b. To display time in format like: hh:mm:ss 
+c. To add two different times (Use Objects as argument)
+#include <iostream>
+using namespace std;
+
+class Time {
+private:
+    int hours;
+    int minutes;
+    int seconds;
+
+public:
+    // Function to read time
+    void readTime() {
+        cout << "Enter hours: ";
+        cin >> hours;
+        cout << "Enter minutes: ";
+        cin >> minutes;
+        cout << "Enter seconds: ";
+        cin >> seconds;
+    }
+
+    // Function to display time in format hh:mm:ss
+    void displayTime() {
+        cout << "Time: ";
+        cout << (hours < 10 ? "0" : "") << hours << ":";
+        cout << (minutes < 10 ? "0" : "") << minutes << ":";
+        cout << (seconds < 10 ? "0" : "") << seconds << endl;
+    }
+
+    // Function to add two different times
+    Time addTime(const Time& t) {
+        Time result;
+        int carry = 0;
+
+        result.seconds = (seconds + t.seconds) % 60;
+        carry = (seconds + t.seconds) / 60;
+
+        result.minutes = (minutes + t.minutes + carry) % 60;
+        carry = (minutes + t.minutes + carry) / 60;
+
+        result.hours = (hours + t.hours + carry) % 24;
+
+        return result;
+    }
+};
+
+int main() {
+    Time time1, time2, sum;
+
+    cout << "Enter first time:" << endl;
+    time1.readTime();
+    cout << "Enter second time:" << endl;
+    time2.readTime();
+
+    cout << "\nFirst time:" << endl;
+    time1.displayTime();
+    cout << "Second time:" << endl;
+    time2.displayTime();
+
+    sum = time1.addTime(time2);
+    cout << "\nSum of times:" << endl;
+    sum.displayTime();
+
+    return 0;
+}
+slip 10  -     Q1.Write a C++ program to create a class employee containing salary as a data member. Write 
+necessary member functions to overload the operator unary pre and post decrement "--" 
+for decrementing salary.
+#include <iostream>
+using namespace std;
+
+class Employee {
+private:
+    double salary;
+
+public:
+    // Constructor to initialize salary
+    Employee(double s) : salary(s) {}
+
+    // Overloading unary pre-decrement operator
+    Employee& operator--() {
+        --salary;
+        return *this;
+    }
+
+    // Overloading unary post-decrement operator
+    Employee operator--(int) {
+        Employee temp(*this);
+        --salary;
+        return temp;
+    }
+
+    // Function to display salary
+    void displaySalary() const {
+        cout << "Salary: " << salary << endl;
+    }
+};
+
+int main() {
+    // Create an Employee object with initial salary
+    Employee emp(50000);
+
+    cout << "Original Salary: ";
+    emp.displaySalary();
+
+    // Pre-decrementing salary
+    --emp;
+    cout << "Salary after pre-decrement: ";
+    emp.displaySalary();
+
+    // Post-decrementing salary
+    Employee emp2 = emp--;
+    cout << "Salary after post-decrement: ";
+    emp2.displaySalary();
+    cout << "Salary of original object after post-decrement: ";
+    emp.displaySalary();
+
+    return 0;
+}
+Q2.        Design a base class Product(Product _Id, Product _Name, Price). Derive a class Discount 
+(Discount_In_Percentage) from Product. A customer buys n Products. Calculate total price, 
+total discount and display bill using appropriate manipulators.
+not answered
+Q3.       Create a class String which contains a character pointer (Use new and delete operator). Write a 
+C++ program to overload following operators: 
+a. < To compare length of two strings 
+b. == To check equality of two strings 
+c. + To concatenate two strings
+not as
+not answered
+#include <cstring>
+#include <iostream>
+#include <string.h>
+ 
+using namespace std;
+ 
+// Class to implement operator overloading
+// function for concatenating the strings
+class CompareString {
+ 
+public:
+    // Classes object of string
+    char str[25];
+ 
+    // Parameterized Constructor
+    CompareString(char str1[])
+    {
+        // Initialize the string to class object
+        strcpy(this->str, str1);
+    }
+ 
+    // Overloading '==' under a function
+    // which returns integer 1/true
+    // if left operand string
+    // and right operand string are equal.
+    //(else return 0/false)
+    int operator==(CompareString s2)
+    {
+        if (strcmp(str, s2.str) == 0)
+            return 1;
+        else
+            return 0;
+    }
+ 
+    // Overloading '<=' under a function
+    // which returns integer 1/true
+    // if left operand string is smaller than
+    // or equal to the right operand string.
+    // (else return 0/false)
+    int operator<=(CompareString s3)
+    {
+        if (strlen(str) <= strlen(s3.str))
+            return 1;
+        else
+            return 0;
+    }
+ 
+    // Overloading '>=' under a function
+    // which returns integer 1/true
+    // if left operand string is larger than
+    // or equal to the right operand string.
+    //(else return 0/false)
+    int operator>=(CompareString s3)
+    {
+        if (strlen(str) >= strlen(s3.str))
+            return 1;
+        else
+            return 0;
+    }
+};
+ 
+void compare(CompareString s1, CompareString s2)
+{
+ 
+    if (s1 == s2)
+        cout << s1.str << " is equal to "
+             << s2.str << endl;
+    else {
+        cout << s1.str << " is not equal to "
+             << s2.str << endl;
+        if (s1 >= s2)
+            cout << s1.str << " is greater than "
+                 << s2.str << endl;
+        else
+            cout << s2.str << " is greater than "
+                 << s1.str << endl;
+    }
+}
+ 
+// Testcase1
+void testcase1()
+{
+    // Declaring two strings
+    char str1[] = "Geeks";
+    char str2[] = "ForGeeks";
+ 
+    // Declaring and initializing the class
+    // with above two strings
+    CompareString s1(str1);
+    CompareString s2(str2);
+ 
+    cout << "Comparing \"" << s1.str << "\" and \""
+         << s2.str << "\"" << endl;
+ 
+    compare(s1, s2);
+}
+ 
+// Testcase2
+void testcase2()
+{
+    // Declaring two strings
+    char str1[] = "Geeks";
+    char str2[] = "Geeks";
+ 
+    // Declaring and initializing the class
+    // with above two strings
+    CompareString s1(str1);
+    CompareString s2(str2);
+ 
+    cout << "\n\nComparing \"" << s1.str << "\" and \""
+         << s2.str << "\"" << endl;
+ 
+    compare(s1, s2);
+}
+ 
+// Driver code
+int main()
+{
+    testcase1();
+    testcase2();
+ 
+    return 0;
+}
+slpi 11 -     Q1.Write a C++ program to read two float numbers. Perform arithmetic binary operations +,-,*,/ on 
+these numbers using inline function. Display the resultant value.
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class String {
+private:
+    char* str;
+
+public:
+    // Constructor
+    String(const char* s) {
+        int len = strlen(s);
+        str = new char[len + 1];
+        strcpy(str, s);
+    }
+
+    // Destructor
+    ~String() {
+        delete[] str;
+    }
+
+    // Function to compare length of two strings
+    bool operator<(const String& s) const {
+        return strlen(str) < strlen(s.str);
+    }
+
+    // Function to check equality of two strings
+    bool operator==(const String& s) const {
+        return strcmp(str, s.str) == 0;
+    }
+
+    // Function to concatenate two strings
+    String operator+(const String& s) const {
+        int len1 = strlen(str);
+        int len2 = strlen(s.str);
+        char* result = new char[len1 + len2 + 1];
+        strcpy(result, str);
+        strcat(result, s.str);
+        String concatString(result);
+        delete[] result;
+        return concatString;
+    }
+
+    // Function to display the string
+    void display() const {
+        cout << str;
+    }
+};
+
+int main() {
+    // Testing overloaded operators
+    String str1("Hello");
+    String str2("World");
+
+    cout << "String 1: ";
+    str1.display();
+    cout << endl;
+
+    cout << "String 2: ";
+    str2.display();
+    cout << endl;
+
+    // Comparing length of two strings
+    cout << "Is String 1 shorter than String 2? ";
+    cout << (str1 < str2 ? "Yes" : "No") << endl;
+
+    // Checking equality of two strings
+    cout << "Are String 1 and String 2 equal? ";
+    cout << (str1 == str2 ? "Yes" : "No") << endl;
+
+    // Concatenating two strings
+    String concat = str1 + str2;
+    cout << "Concatenated string: ";
+    concat.display();
+    cout << endl;
+
+    return 0;
+}
+Q2.      Write a C++ program to create a class Person that contains data members as Person_Name, City, 
+Mob_No. Write a C++ program to perform following functions: 
+a. To accept and display Person information 
+b. To search the Person details of a given mobile number 
+c. To search the Person details of a given city. 
+(Use Function Overloading)
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+private:
+    string Person_Name;
+    string City;
+    string Mob_No;
+
+public:
+    // Function to accept Person information
+    void acceptPersonInfo() {
+        cout << "Enter Person Name: ";
+        getline(cin, Person_Name);
+        cout << "Enter City: ";
+        getline(cin, City);
+        cout << "Enter Mobile Number: ";
+        getline(cin, Mob_No);
+    }
+
+    // Function to display Person information
+    void displayPersonInfo() const {
+        cout << "Person Name: " << Person_Name << endl;
+        cout << "City: " << City << endl;
+        cout << "Mobile Number: " << Mob_No << endl;
+    }
+
+    // Function to search Person details by mobile number
+    void searchPersonByMobile(const string& mobileNumber) const {
+        if (Mob_No == mobileNumber) {
+            cout << "Person found with the given mobile number:" << endl;
+            displayPersonInfo();
+        } else {
+            cout << "Person not found with the given mobile number." << endl;
+        }
+    }
+
+    // Function to search Person details by city
+    void searchPersonByCity(const string& cityName) const {
+        if (City == cityName) {
+            cout << "Person found in the given city:" << endl;
+            displayPersonInfo();
+        } else {
+            cout << "Person not found in the given city." << endl;
+        }
+    }
+};
+
+int main() {
+    Person person;
+
+    // Accepting Person information
+    cout << "Enter Person information:" << endl;
+    person.acceptPersonInfo();
+
+    // Displaying Person information
+    cout << "\nDisplaying Person information:" << endl;
+    person.displayPersonInfo();
+
+    // Searching by mobile number
+    string searchMobNo;
+    cout << "\nEnter the mobile number to search: ";
+    getline(cin, searchMobNo);
+    person.searchPersonByMobile(searchMobNo);
+
+    // Searching by city
+    string searchCity;
+    cout << "\nEnter the city name to search: ";
+    getline(cin, searchCity);
+    person.searchPersonByCity(searchCity);
+
+    return 0;
+}
+Q3.       Create a base class Conversion. Derive three different classes Weight (Gram, Kilogram), 
+Volume (Milliliter, Liter), Currency (Rupees, Paise) from Conversion class. Write a program 
+to perform read, convert and display operations. (Use Pure virtual function)
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Base class Conversion
+class Conversion {
+public:
+    // Pure virtual function for reading input
+    virtual void readInput() = 0;
+
+    // Pure virtual function for converting input
+    virtual void convert() = 0;
+
+    // Pure virtual function for displaying result
+    virtual void displayResult() const = 0;
+};
+
+// Derived class Weight
+class Weight : public Conversion {
+private:
+    double gram;
+    double kilogram;
+
+public:
+    // Function to read weight input
+    void readInput() override {
+        cout << "Enter weight in grams: ";
+        cin >> gram;
+    }
+
+    // Function to convert weight from grams to kilograms
+    void convert() override {
+        kilogram = gram / 1000.0; // 1 kilogram = 1000 grams
+    }
+
+    // Function to display weight in kilograms
+    void displayResult() const override {
+        cout << "Weight in kilograms: " << kilogram << " kg" << endl;
+    }
+};
+
+// Derived class Volume
+class Volume : public Conversion {
+private:
+    double milliliter;
+    double liter;
+
+public:
+    // Function to read volume input
+    void readInput() override {
+        cout << "Enter volume in milliliters: ";
+        cin >> milliliter;
+    }
+
+    // Function to convert volume from milliliters to liters
+    void convert() override {
+        liter = milliliter / 1000.0; // 1 liter = 1000 milliliters
+    }
+
+    // Function to display volume in liters
+    void displayResult() const override {
+        cout << "Volume in liters: " << liter << " L" << endl;
+    }
+};
+
+// Derived class Currency
+class Currency : public Conversion {
+private:
+    double rupees;
+    double paise;
+
+public:
+    // Function to read currency input
+    void readInput() override {
+        cout << "Enter amount in rupees: ";
+        cin >> rupees;
+    }
+
+    // Function to convert currency from rupees to paise
+    void convert() override {
+        paise = rupees * 100; // 1 rupee = 100 paise
+    }
+
+    // Function to display currency in paise
+    void displayResult() const override {
+        cout << "Amount in paise: " << paise << " paise" << endl;
+    }
+};
+
+int main() {
+    Weight weight;
+    Volume volume;
+    Currency currency;
+
+    // Perform operations for Weight
+    cout << "Weight Conversion:" << endl;
+    weight.readInput();
+    weight.convert();
+    weight.displayResult();
+
+    // Perform operations for Volume
+    cout << "\nVolume Conversion:" << endl;
+    volume.readInput();
+    volume.convert();
+    volume.displayResult();
+
+    // Perform operations for Currency
+    cout << "\nCurrency Conversion:" << endl;
+    currency.readInput();
+    currency.convert();
+    currency.displayResult();
+
+    return 0;
+}
+slip 12   -       Q1.Write a C++ program to accept length and width of a rectangle. Calculate and display perimeter 
+as well as area of a rectangle by using inline function.
+#include <iostream>
+
+using namespace std;
+
+// Inline function to calculate perimeter of rectangle
+inline double calculatePerimeter(double length, double width) {
+    return 2 * (length + width);
+}
+
+// Inline function to calculate area of rectangle
+inline double calculateArea(double length, double width) {
+    return length * width;
+}
+
+int main() {
+    double length, width;
+
+    // Accepting length and width of rectangle
+    cout << "Enter length of rectangle: ";
+    cin >> length;
+    cout << "Enter width of rectangle: ";
+    cin >> width;
+
+    // Calculating perimeter and area using inline functions
+    double perimeter = calculatePerimeter(length, width);
+    double area = calculateArea(length, width);
+
+    // Displaying the calculated values
+    cout << "Perimeter of the rectangle: " << perimeter << endl;
+    cout << "Area of the rectangle: " << area << endl;
+
+    return 0;
+}
+Q2.     Write a C++ program to create a class which contains single dimensional integer array of 
+given size. Define member function to display median of a given array. (Use Dynamic 
+Constructor to allocate and Destructor to free memory of an object).
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class Array {
+private:
+    int* arr;
+    int size;
+
+public:
+    // Dynamic Constructor to allocate memory for the array
+    Array(int s) : size(s) {
+        arr = new int[size];
+    }
+
+    // Destructor to free memory
+    ~Array() {
+        delete[] arr;
+    }
+
+    // Function to accept elements of the array
+    void acceptArray() {
+        cout << "Enter " << size << " elements of the array:" << endl;
+        for (int i = 0; i < size; ++i) {
+            cin >> arr[i];
+        }
+    }
+
+    // Function to display median of the array
+    void displayMedian() const {
+        // Sort the array
+        sort(arr, arr + size);
+
+        // Calculate median
+        double median;
+        if (size % 2 == 0) {
+            median = (arr[size / 2 - 1] + arr[size / 2]) / 2.0;
+        } else {
+            median = arr[size / 2];
+        }
+
+        cout << "Median of the array: " << median << endl;
+    }
+};
+
+int main() {
+    int size;
+    cout << "Enter the size of the array: ";
+    cin >> size;
+
+    // Create an object of Array class
+    Array array(size);
+
+    // Accept elements of the array
+    array.acceptArray();
+
+    // Display median of the array
+    array.displayMedian();
+
+    return 0;
+}
+Q3.        Implement the following class hierarchy: 
+Employee: code, ename, desg 
+Manager (derived from Employee): year_of_experience, salary 
+Define appropriate functions to accept and display details. 
+Create n objects of the manager class and display the records. 
+Write main function that uses the above class and its member functions.
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Base class Employee
+class Employee {
+protected:
+    int code;
+    string ename;
+    string desg;
+
+public:
+    // Function to accept details of an employee
+    void acceptDetails() {
+        cout << "Enter Employee Code: ";
+        cin >> code;
+        cout << "Enter Employee Name: ";
+        cin.ignore(); // Clear input buffer
+        getline(cin, ename);
+        cout << "Enter Employee Designation: ";
+        getline(cin, desg);
+    }
+
+    // Function to display details of an employee
+    void displayDetails() const {
+        cout << "Employee Code: " << code << endl;
+        cout << "Employee Name: " << ename << endl;
+        cout << "Employee Designation: " << desg << endl;
+    }
+};
+
+// Derived class Manager from Employee
+class Manager : public Employee {
+private:
+    int year_of_experience;
+    double salary;
+
+public:
+    // Function to accept details of a manager
+    void acceptManagerDetails() {
+        acceptDetails(); // Call base class function to accept employee details
+        cout << "Enter Manager's Years of Experience: ";
+        cin >> year_of_experience;
+        cout << "Enter Manager's Salary: ";
+        cin >> salary;
+    }
+
+    // Function to display details of a manager
+    void displayManagerDetails() const {
+        displayDetails(); // Call base class function to display employee details
+        cout << "Manager's Years of Experience: " << year_of_experience << endl;
+        cout << "Manager's Salary: " << salary << endl;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of managers: ";
+    cin >> n;
+
+    vector<Manager> managers(n); // Vector to hold n Manager objects
+
+    // Accept details of each manager
+    for (int i = 0; i < n; ++i) {
+        cout << "\nEnter details for Manager " << i + 1 << ":" << endl;
+        managers[i].acceptManagerDetails();
+    }
+
+    // Display details of all managers
+    cout << "\nDisplaying details of all managers:" << endl;
+    for (int i = 0; i < n; ++i) {
+        cout << "\nDetails for Manager " << i + 1 << ":" << endl;
+        managers[i].displayManagerDetails();
+    }
+
+    return 0;
+}
+slip 13 --     v
+slip 13 --     Q1.Write a C++ program to implement a class ‘student’ to overload following functions as follows: 
+a. int maximum(int, int) – returns the maximum score of two students 
+b. int maximum(int *a, int arraylength) – returns the maximum score from an array ‘a’
+#include <iostream>
+
+using namespace std;
+
+class Student {
+public:
+    // Function to find maximum score of two students
+    int maximum(int score1, int score2) {
+        return (score1 > score2) ? score1 : score2;
+    }
+
+    // Function to find maximum score from an array
+    int maximum(int *a, int arrayLength) {
+        int maxScore = a[0];
+        for (int i = 1; i < arrayLength; ++i) {
+            if (a[i] > maxScore) {
+                maxScore = a[i];
+            }
+        }
+        return maxScore;
+    }
+};
+
+int main() {
+    Student student;
+
+    // Test case for finding maximum of two scores
+    int score1, score2;
+    cout << "Enter score 1: ";
+    cin >> score1;
+    cout << "Enter score 2: ";
+    cin >> score2;
+    int maxScore = student.maximum(score1, score2);
+    cout << "Maximum score between " << score1 << " and " << score2 << " is: " << maxScore << endl;
+
+    // Test case for finding maximum from an array
+    int arrayLength;
+    cout << "Enter the length of the array: ";
+    cin >> arrayLength;
+    int *scores = new int[arrayLength];
+    cout << "Enter the scores: ";
+    for (int i = 0; i < arrayLength; ++i) {
+        cin >> scores[i];
+    }
+    maxScore = student.maximum(scores, arrayLength);
+    cout << "Maximum score from the array is: " << maxScore << endl;
+
+    delete[] scores; // Free memory allocated for array
+    return 0;
+}
+Q2.       Write a C++ program to create a class Distance which contains data members as kilometer, meter. 
+Write a program to perform the following functions 
+a.To accept distance 
+b.To display distance 
+c.To overload > operator to compare two distance
+#include <iostream>
+
+using namespace std;
+
+class Distance {
+private:
+    int kilometer;
+    int meter;
+
+public:
+    // Function to accept distance
+    void acceptDistance() {
+        cout << "Enter distance in kilometers: ";
+        cin >> kilometer;
+        cout << "Enter distance in meters: ";
+        cin >> meter;
+    }
+
+    // Function to display distance
+    void displayDistance() const {
+        cout << "Distance: " << kilometer << " kilometers " << meter << " meters" << endl;
+    }
+
+    // Overloading > operator to compare two distances
+    bool operator>(const Distance& other) const {
+        // Convert both distances to meters for comparison
+        int distance1 = kilometer * 1000 + meter;
+        int distance2 = other.kilometer * 1000 + other.meter;
+        return distance1 > distance2;
+    }
+};
+
+int main() {
+    Distance distance1, distance2;
+
+    // Accept distances
+    cout << "Enter details for Distance 1:" << endl;
+    distance1.acceptDistance();
+
+    cout << "\nEnter details for Distance 2:" << endl;
+    distance2.acceptDistance();
+
+    // Display distances
+    cout << "\nDetails of Distance 1:" << endl;
+    distance1.displayDistance();
+
+    cout << "\nDetails of Distance 2:" << endl;
+    distance2.displayDistance();
+
+    // Compare distances
+    if (distance1 > distance2) {
+        cout << "\nDistance 1 is greater than Distance 2." << endl;
+    } else {
+        cout << "\nDistance 2 is greater than Distance 1." << endl;
+    }
+
+    return 0;
+}
+Q3.        Write a C++ program to read the contents of a text file. Count and display number of characters, 
+words and lines from a file. Find the number of occurrences of a given word present in a file.
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+// Function to count characters, words, and lines in a file
+void countCharactersWordsLines(const string& filename, int& charCount, int& wordCount, int& lineCount) {
+    ifstream file(filename);
+    string line;
+
+    charCount = wordCount = lineCount = 0;
+
+    while (getline(file, line)) {
+        ++lineCount;
+
+        charCount += line.size(); // Count characters in the line
+
+        stringstream ss(line);
+        string word;
+        while (ss >> word) {
+            ++wordCount; // Count words in the line
+        }
+    }
+}
+
+// Function to count occurrences of a given word in a file
+int countWordOccurrences(const string& filename, const string& wordToFind) {
+    ifstream file(filename);
+    string word;
+    int count = 0;
+
+    while (file >> word) {
+        if (word == wordToFind) {
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+int main() {
+    string filename;
+    cout << "Enter the filename: ";
+    cin >> filename;
+
+    int charCount, wordCount, lineCount;
+    countCharactersWordsLines(filename, charCount, wordCount, lineCount);
+
+    cout << "\nNumber of characters: " << charCount << endl;
+    cout << "Number of words: " << wordCount << endl;
+    cout << "Number of lines: " << lineCount << endl;
+
+    string wordToFind;
+    cout << "\nEnter the word to find: ";
+    cin >> wordToFind;
+
+    int occurrences = countWordOccurrences(filename, wordToFind);
+    cout << "Number of occurrences of '" << wordToFind << "' in the file: " << occurrences << endl;
+
+    return 0;
+}
+slip 14   -    Q1. Write a C++ program to interchange values of two integer numbers (use call by reference).[
+#include<iostream>
+
+// Function to swap values using call by reference
+void swapNumbers(int &a, int &b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int main() {
+    // Declare and initialize two integer numbers
+    int num1 = 5, num2 = 10;
+
+    // Display the original values
+    std::cout << "Before swapping - num1: " << num1 << ", num2: " << num2 << std::endl;
+
+    // Call the function to swap values
+    swapNumbers(num1, num2);
+
+    // Display the swapped values
+    std::cout << "After swapping - num1: " << num1 << ", num2: " << num2 << std::endl;
+
+    return 0;
+}
+Q2.      Write a C++ program to define a class Bus with the following specifications: Bus No, Bus 
+Name, No of Seats, Starting point, Destination .Write a menu driven program by using 
+appropriate manipulators to 
+a. Accept details of n buses. 
+b. Display all bus details. 
+c. Display details of bus from specified starting point to destination
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Class definition for Bus
+class Bus {
+private:
+    int busNo;
+    string busName;
+    int numOfSeats;
+    string startPoint;
+    string destination;
+
+public:
+    // Constructor to initialize Bus object
+    Bus(int no, string name, int seats, string start, string dest) {
+        busNo = no;
+        busName = name;
+        numOfSeats = seats;
+        startPoint = start;
+        destination = dest;
+    }
+
+    // Function to display bus details
+    void displayDetails() const {
+        cout << "Bus No: " << busNo << endl;
+        cout << "Bus Name: " << busName << endl;
+        cout << "Number of Seats: " << numOfSeats << endl;
+        cout << "Starting Point: " << startPoint << endl;
+        cout << "Destination: " << destination << endl;
+    }
+
+    // Getter function for starting point
+    string getStartPoint() const {
+        return startPoint;
+    }
+
+    // Getter function for destination
+    string getDestination() const {
+        return destination;
+    }
+};
+
+int main() {
+    vector<Bus> buses; // Vector to store bus objects
+    int choice;
+    int n;
+    string start, dest; // Moved variable declarations outside switch statement
+
+    do {
+        // Display menu
+        cout << "\nMenu:\n";
+        cout << "1. Accept details of n buses\n";
+        cout << "2. Display all bus details\n";
+        cout << "3. Display details of bus from specified starting point to destination\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch(choice) {
+            case 1:
+                // Accept details of n buses
+                cout << "Enter the number of buses: ";
+                cin >> n;
+                for(int i = 0; i < n; i++) {
+                    int busNo, numOfSeats;
+                    string busName, startPoint, destination;
+                    cout << "Enter details for bus " << i+1 << ":\n";
+                    cout << "Bus No: ";
+                    cin >> busNo;
+                    cout << "Bus Name: ";
+                    cin.ignore(); // Ignore newline character in buffer
+                    getline(cin, busName);
+                    cout << "Number of Seats: ";
+                    cin >> numOfSeats;
+                    cout << "Starting Point: ";
+                    cin.ignore(); // Ignore newline character in buffer
+                    getline(cin, startPoint);
+                    cout << "Destination: ";
+                    getline(cin, destination);
+                    buses.push_back(Bus(busNo, busName, numOfSeats, startPoint, destination));
+                }
+                break;
+            case 2:
+                // Display all bus details
+                for(const auto& bus : buses) {
+                    bus.displayDetails();
+                    cout << endl;
+                }
+                break;
+            case 3:
+                // Display details of bus from specified starting point to destination
+                cout << "Enter starting point: ";
+                cin.ignore(); // Ignore newline character in buffer
+                getline(cin, start);
+                cout << "Enter destination: ";
+                getline(cin, dest);
+                for(const auto& bus : buses) {
+                    if(bus.getStartPoint() == start && bus.getDestination() == dest) {
+                        bus.displayDetails();
+                        cout << endl;
+                    }
+                }
+                break;
+            case 4:
+                // Exit the program
+                cout << "Exiting program...\n";
+                break;
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    } while(choice != 4);
+
+    return 0;
+}
+Q2.         Create a class Fraction that contains two data members as numerator and denominator. 
+Write a C++ program to overload following operators 
+a. ++ Unary (pre and post both) 
+b. << and >> Overload as friend functions
+#include <iostream>
+
+using namespace std;
+
+class Fraction {
+private:
+    int numerator;
+    int denominator;
+
+public:
+    // Constructor
+    Fraction(int num = 0, int den = 1) : numerator(num), denominator(den) {}
+
+    // Overloading pre-increment operator (++Fraction)
+    Fraction operator++() {
+        numerator += denominator;
+        return *this;
+    }
+
+    // Overloading post-increment operator (Fraction++)
+    Fraction operator++(int) {
+        Fraction temp = *this;
+        numerator += denominator;
+        return temp;
+    }
+
+    // Friend function to overload stream insertion operator (<<)
+    friend ostream& operator<<(ostream& out, const Fraction& frac) {
+        out << frac.numerator << "/" << frac.denominator;
+        return out;
+    }
+
+    // Friend function to overload stream extraction operator (>>)
+    friend istream& operator>>(istream& in, Fraction& frac) {
+        cout << "Enter the numerator: ";
+        in >> frac.numerator;
+        cout << "Enter the denominator: ";
+        in >> frac.denominator;
+        return in;
+    }
+};
+
+int main() {
+    Fraction f1(3, 4), f2;
+
+    // Testing pre-increment operator
+    cout << "Before pre-increment: " << f1 << endl;
+    ++f1;
+    cout << "After pre-increment: " << f1 << endl;
+
+    // Testing post-increment operator
+    cout << "Before post-increment: " << f1 << endl;
+    f2 = f1++;
+    cout << "After post-increment: " << f1 << endl;
+    cout << "Post-incremented value: " << f2 << endl;
+
+    // Testing stream extraction operator
+    cout << "Enter a fraction (numerator/denominator): ";
+    cin >> f2;
+    cout << "You entered: " << f2 << endl;
+
+    return 0;
+}
+slip 15  -      Q1.Write a C++ program to check minimum and maximum of two integer number (use inline 
+function and conditional operator)
+#include <iostream>
+
+// Inline function to find minimum of two numbers
+inline int findMin(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+// Inline function to find maximum of two numbers
+inline int findMax(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int main() {
+    int num1, num2;
+
+    // Input two integer numbers
+    std::cout << "Enter first number: ";
+    std::cin >> num1;
+    std::cout << "Enter second number: ";
+    std::cin >> num2;
+
+    // Find and display minimum and maximum using inline functions and conditional operator
+    std::cout << "Minimum of " << num1 << " and " << num2 << " is: " << findMin(num1, num2) << std::endl;
+    std::cout << "Maximum of " << num1 << " and " << num2 << " is: " << findMax(num1, num2) << std::endl;
+
+    return 0;
+}
+Q2.       Create a base class Conversion. Derive three different classes Weight (Gram, Kilogram), Volume 
+(Milliliter, Liter), Currency (Rupees, Paise) from Conversion class. Write a program to perform 
+read, convert and display operations. (Use Pure virtual function)
+#include <iostream>
+
+using namespace std;
+
+// Base class Conversion
+class Conversion {
+public:
+    // Pure virtual function for reading input
+    virtual void readInput() = 0;
+
+    // Pure virtual function for conversion
+    virtual void convert() = 0;
+
+    // Pure virtual function for displaying result
+    virtual void displayResult() = 0;
+};
+
+// Derived class Weight
+class Weight : public Conversion {
+private:
+    double gram;
+    double kilogram;
+
+public:
+    // Read weight input in grams
+    void readInput() override {
+        cout << "Enter weight in grams: ";
+        cin >> gram;
+    }
+
+    // Convert grams to kilograms
+    void convert() override {
+        kilogram = gram / 1000.0;
+    }
+
+    // Display weight in kilograms
+    void displayResult() override {
+        cout << "Weight in kilograms: " << kilogram << " kg" << endl;
+    }
+};
+
+// Derived class Volume
+class Volume : public Conversion {
+private:
+    double milliliter;
+    double liter;
+
+public:
+    // Read volume input in milliliters
+    void readInput() override {
+        cout << "Enter volume in milliliters: ";
+        cin >> milliliter;
+    }
+
+    // Convert milliliters to liters
+    void convert() override {
+        liter = milliliter / 1000.0;
+    }
+
+    // Display volume in liters
+    void displayResult() override {
+        cout << "Volume in liters: " << liter << " L" << endl;
+    }
+};
+
+// Derived class Currency
+class Currency : public Conversion {
+private:
+    double rupees;
+    double paise;
+
+public:
+    // Read currency input in rupees
+    void readInput() override {
+        cout << "Enter amount in rupees: ";
+        cin >> rupees;
+    }
+
+    // Convert rupees to paise
+    void convert() override {
+        paise = rupees * 100;
+    }
+
+    // Display currency in paise
+    void displayResult() override {
+        cout << "Amount in paise: " << paise << " paise" << endl;
+    }
+};
+
+int main() {
+    Weight weight;
+    Volume volume;
+    Currency currency;
+
+    // Perform operations for weight
+    cout << "Weight Conversion:" << endl;
+    weight.readInput();
+    weight.convert();
+    weight.displayResult();
+
+    // Perform operations for volume
+    cout << "\nVolume Conversion:" << endl;
+    volume.readInput();
+    volume.convert();
+    volume.displayResult();
+
+    // Perform operations for currency
+    cout << "\nCurrency Conversion:" << endl;
+    currency.readInput();
+    currency.convert();
+    currency.displayResult();
+
+    return 0;
+}
+Q3.         Write C++ program to create a class Employee containing data members Emp_no, Emp_Name, 
+Designation and Salary. Create and initialize the objects using default, parameterized and Copy 
+Constructor. Also write member function to calculate Income tax of the employee which is 20% 
+of salary.
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Employee {
+private:
+    int Emp_no;
+    string Emp_Name;
+    string Designation;
+    double Salary;
+
+public:
+    // Default Constructor
+    Employee() : Emp_no(0), Emp_Name("NoName"), Designation("None"), Salary(0.0) {}
+
+    // Parameterized Constructor
+    Employee(int empNo, string empName, string designation, double salary)
+        : Emp_no(empNo), Emp_Name(empName), Designation(designation), Salary(salary) {}
+
+    // Copy Constructor
+    Employee(const Employee& emp)
+        : Emp_no(emp.Emp_no), Emp_Name(emp.Emp_Name), Designation(emp.Designation), Salary(emp.Salary) {}
+
+    // Function to calculate income tax
+    double calculateIncomeTax() const {
+        return 0.20 * Salary; // Assuming income tax is 20% of the salary
+    }
+
+    // Function to display employee details
+    void displayDetails() const {
+        cout << "Employee Details:\n";
+        cout << "Employee Number: " << Emp_no << endl;
+        cout << "Employee Name: " << Emp_Name << endl;
+        cout << "Designation: " << Designation << endl;
+        cout << "Salary: " << Salary << endl;
+        cout << "Income Tax: " << calculateIncomeTax() << endl;
+    }
+};
+
+int main() {
+    // Creating objects using different constructors
+    Employee emp1; // Default Constructor
+    Employee emp2(101, "John Doe", "Manager", 50000.0); // Parameterized Constructor
+    Employee emp3 = emp2; // Copy Constructor
+
+    // Displaying employee details
+    cout << "Employee 1:\n";
+    emp1.displayDetails();
+    cout << endl;
+
+    cout << "Employee 2:\n";
+    emp2.displayDetails();
+    cout << endl;
+
+    cout << "Employee 3 (Copy of Employee 2):\n";
+    emp3.displayDetails();
+    cout << endl;
+
+    return 0;
+}
+slip 16  -    Q1. Write a C++ program to create a class Number which contains two integer data members. Create 
+and initialize the object by using default constructor, parameterized constructor. Write a 
+member function to display maximum from given two numbers for all objects.
+#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int num1;
+    int num2;
+
+public:
+    // Default Constructor
+    Number() {
+        num1 = 0;
+        num2 = 0;
+    }
+
+    // Parameterized Constructor
+    Number(int n1, int n2) {
+        num1 = n1;
+        num2 = n2;
+    }
+
+    // Member function to display maximum
+    void displayMax() {
+        cout << "Maximum of " << num1 << " and " << num2 << " is: " << ((num1 > num2) ? num1 : num2) << endl;
+    }
+};
+
+int main() {
+    // Creating objects using default constructor and parameterized constructor
+    Number obj1; // Default constructor
+    Number obj2(5, 10); // Parameterized constructor
+
+    // Display maximum for both objects
+    cout << "For object 1:\n";
+    obj1.displayMax();
+
+    cout << "For object 2:\n";
+    obj2.displayMax();
+
+    return 0;
+}
+Q2.       Create two base classes Learn_Info(Roll_No, Stud_Name, Class, Percentage) and 
+Earn_Info(No_of_hours_worked, Charges_per_hour). Derive a class Earn_Learn_info from 
+above two classes. Write necessary member functions to accept and display Student 
+information. Calculate total money earned by the student. (Use constructor in derived class)
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Base class for learning information
+class Learn_Info {
+protected:
+    int Roll_No;
+    string Stud_Name;
+    string Class;
+    float Percentage;
+
+public:
+    // Parameterized constructor
+    Learn_Info(int rollNo, string studName, string _class, float percentage)
+        : Roll_No(rollNo), Stud_Name(studName), Class(_class), Percentage(percentage) {}
+
+    // Function to accept student information
+    void acceptStudentInfo() {
+        cout << "Enter Roll No: ";
+        cin >> Roll_No;
+        cout << "Enter Student Name: ";
+        cin.ignore(); // Ignore newline character in buffer
+        getline(cin, Stud_Name);
+        cout << "Enter Class: ";
+        getline(cin, Class);
+        cout << "Enter Percentage: ";
+        cin >> Percentage;
+    }
+
+    // Function to display student information
+    void displayStudentInfo() {
+        cout << "Roll No: " << Roll_No << endl;
+        cout << "Student Name: " << Stud_Name << endl;
+        cout << "Class: " << Class << endl;
+        cout << "Percentage: " << Percentage << "%" << endl;
+    }
+};
+
+// Base class for earning information
+class Earn_Info {
+protected:
+    int No_of_hours_worked;
+    float Charges_per_hour;
+
+public:
+    // Parameterized constructor
+    Earn_Info(int hoursWorked, float chargesPerHour)
+        : No_of_hours_worked(hoursWorked), Charges_per_hour(chargesPerHour) {}
+
+    // Function to accept earning information
+    void acceptEarningInfo() {
+        cout << "Enter Number of Hours Worked: ";
+        cin >> No_of_hours_worked;
+        cout << "Enter Charges per Hour: ";
+        cin >> Charges_per_hour;
+    }
+
+    // Function to display earning information
+    void displayEarningInfo() {
+        cout << "Number of Hours Worked: " << No_of_hours_worked << endl;
+        cout << "Charges per Hour: " << Charges_per_hour << endl;
+    }
+
+    // Function to calculate total earnings
+    float calculateTotalEarnings() {
+        return No_of_hours_worked * Charges_per_hour;
+    }
+};
+
+// Derived class from Learn_Info and Earn_Info
+class Earn_Learn_Info : public Learn_Info, public Earn_Info {
+public:
+    // Constructor to initialize both base classes
+    Earn_Learn_Info(int rollNo, string studName, string _class, float percentage,
+                    int hoursWorked, float chargesPerHour)
+        : Learn_Info(rollNo, studName, _class, percentage), Earn_Info(hoursWorked, chargesPerHour) {}
+
+    // Function to accept student and earning information
+    void acceptInfo() {
+        acceptStudentInfo();
+        acceptEarningInfo();
+    }
+
+    // Function to display student and earning information
+    void displayInfo() {
+        cout << "Student Information:\n";
+        displayStudentInfo();
+        cout << "\nEarning Information:\n";
+        displayEarningInfo();
+    }
+
+    // Function to calculate total money earned
+    float calculateTotalMoneyEarned() {
+        return calculateTotalEarnings();
+    }
+};
+
+int main() {
+    // Create an object of Earn_Learn_Info
+    Earn_Learn_Info student(101, "John Doe", "Class 10", 85.5, 20, 15.0);
+
+    // Accept and display student and earning information
+    cout << "Enter Student and Earning Information:\n";
+    student.acceptInfo();
+    cout << "\nStudent and Earning Information:\n";
+    student.displayInfo();
+
+    // Calculate and display total money earned
+    cout << "\nTotal Money Earned: $" << student.calculateTotalMoneyEarned() << endl;
+
+    return 0;
+}
+Q3 .           Create a class Time containing members as: - hours - minutes - seconds 
+Write a C++ program for overloading operators >> and << to accept and display a Time 
+also write a member function to display time in total seconds.
+#include <iostream>
+
+class Time {
+private:
+    int hours;
+    int minutes;
+    int seconds;
+
+public:
+    // Default constructor
+    Time() : hours(0), minutes(0), seconds(0) {}
+
+    // Parameterized constructor
+    Time(int h, int m, int s) : hours(h), minutes(m), seconds(s) {}
+
+    // Overloading the >> operator to accept time
+    friend std::istream& operator>>(std::istream& in, Time& time) {
+        std::cout << "Enter hours: ";
+        in >> time.hours;
+        std::cout << "Enter minutes: ";
+        in >> time.minutes;
+        std::cout << "Enter seconds: ";
+        in >> time.seconds;
+        return in;
+    }
+
+    // Overloading the << operator to display time
+    friend std::ostream& operator<<(std::ostream& out, const Time& time) {
+        out << "Time: " << time.hours << " hours, " << time.minutes << " minutes, " << time.seconds << " seconds";
+        return out;
+    }
+
+    // Member function to display time in total seconds
+    int totalTimeInSeconds() const {
+        return hours * 3600 + minutes * 60 + seconds;
+    }
+};
+
+int main() {
+    Time t1, t2;
+    
+    // Accept time using overloaded >>
+    std::cout << "Enter time for t1:\n";
+    std::cin >> t1;
+
+    // Display time using overloaded <<
+    std::cout << "Time for t1: " << t1 << std::endl;
+
+    // Display total seconds
+    std::cout << "Total seconds for t1: " << t1.totalTimeInSeconds() << std::endl;
+
+    return 0;
+}
+slip 17  -     Q1.Write a C++ program to check if number is prime or not.
+#include <iostream>
+using namespace std;
+
+bool isPrime(int number) {
+    // Handling special cases
+    if (number <= 1) 
+        return false;
+    if (number <= 3) 
+        return true;
+
+    // Check if number is divisible by any number from 2 to square root of the number
+    for (int i = 2; i * i <= number; i++) {
+        if (number % i == 0)
+            return false;
+    }
+    return true;
+}
+
+int main() {
+    int num;
+    cout << "Enter a number: ";
+    cin >> num;
+
+    if (isPrime(num))
+        cout << num << " is a prime number." << endl;
+    else
+        cout << num << " is not a prime number." << endl;
+
+    return 0;
+}
+Q2.      Create a class Fraction containing data members as Numerator and Denominator. 
+Write a program to overload operators ++ , -- and * to increment, decrement a Fraction and 
+multiply two Fraction respectively. (Use constructor to initialize values of an object)
+#include <iostream>
+
+using namespace std;
+
+class Fraction {
+private:
+    int Numerator;
+    int Denominator;
+
+public:
+    // Constructor to initialize Fraction
+    Fraction(int num = 0, int den = 1) : Numerator(num), Denominator(den) {}
+
+    // Overloading pre-increment operator (++Fraction)
+    Fraction operator++() {
+        Numerator += Denominator;
+        return *this;
+    }
+
+    // Overloading pre-decrement operator (--Fraction)
+    Fraction operator--() {
+        Numerator -= Denominator;
+        return *this;
+    }
+
+    // Overloading multiplication operator (Fraction * Fraction)
+    Fraction operator*(const Fraction& other) {
+        int num = Numerator * other.Numerator;
+        int den = Denominator * other.Denominator;
+        return Fraction(num, den);
+    }
+
+    // Function to display the fraction
+    void displayFraction() const {
+        cout << Numerator << "/" << Denominator << endl;
+    }
+};
+
+int main() {
+    // Creating Fraction objects with constructor initialization
+    Fraction f1(2, 3);
+    Fraction f2(3, 4);
+
+    // Displaying initial fractions
+    cout << "Fraction 1: ";
+    f1.displayFraction();
+    cout << "Fraction 2: ";
+    f2.displayFraction();
+
+    // Testing pre-increment operator
+    cout << "After pre-increment (Fraction 1): ";
+    (++f1).displayFraction();
+
+    // Testing pre-decrement operator
+    cout << "After pre-decrement (Fraction 2): ";
+    (--f2).displayFraction();
+
+    // Testing multiplication operator
+    cout << "Multiplication of Fraction 1 and Fraction 2: ";
+    (f1 * f2).displayFraction();
+
+    return 0;
+}
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// Base class Media
+class Media {
+public:
+    // Pure virtual function to accept information
+    virtual void acceptInfo() = 0;
+
+    // Pure virtual function to display information
+    virtual void displayInfo() const = 0;
+};
+
+// Derived class Book from Media
+class Book : public Media {
+private:
+    int Book_id;
+    string Book_name;
+    string Publication;
+    string Author;
+    double Book_price;
+
+public:
+    // Constructor
+    Book(int id, string name, string pub, string author, double price)
+        : Book_id(id), Book_name(name), Publication(pub), Author(author), Book_price(price) {}
+
+    // Implementation of acceptInfo
+    void acceptInfo() override {
+        cout << "Enter Book ID: ";
+        cin >> Book_id;
+        cout << "Enter Book Name: ";
+        cin.ignore();
+        getline(cin, Book_name);
+        cout << "Enter Publication: ";
+        getline(cin, Publication);
+        cout << "Enter Author: ";
+        getline(cin, Author);
+        cout << "Enter Book Price: ";
+        cin >> Book_price;
+    }
+
+    // Implementation of displayInfo
+    void displayInfo() const override {
+        cout << "Book ID: " << Book_id << endl;
+        cout << "Book Name: " << Book_name << endl;
+        cout << "Publication: " << Publication << endl;
+        cout << "Author: " << Author << endl;
+        cout << "Book Price: $" << fixed << setprecision(2) << Book_price << endl;
+    }
+};
+
+// Derived class CD from Media
+class CD : public Media {
+private:
+    string CD_title;
+    double CD_price;
+
+public:
+    // Constructor
+    CD(string title, double price) : CD_title(title), CD_price(price) {}
+
+    // Implementation of acceptInfo
+    void acceptInfo() override {
+        cout << "Enter CD Title: ";
+        cin.ignore();
+        getline(cin, CD_title);
+        cout << "Enter CD Price: ";
+        cin >> CD_price;
+    }
+
+    // Implementation of displayInfo
+    void displayInfo() const override {
+        cout << "CD Title: " << CD_title << endl;
+        cout << "CD Price: $" << fixed << setprecision(2) << CD_price << endl;
+    }
+};
+
+int main() {
+    // Create objects of Book and CD
+    Book book(101, "The Great Gatsby", "Scribner", "F. Scott Fitzgerald", 12.99);
+    CD cd("Thriller", 9.99);
+
+    // Accept and display information for Book and CD
+    cout << "Book Information:\n";
+    book.acceptInfo();
+    cout << "\nCD Information:\n";
+    cd.acceptInfo();
+
+    cout << "\nBook Details:\n";
+    book.displayInfo();
+    cout << "\nCD Details:\n";
+    cd.displayInfo();
+
+    return 0;
+}
+slip 18 -     Q1.Write a C++ program to calculate following series: 
+(1) + (1+2) + (1+2+3) + (1+2+3+4) + ... +(1+2+3+4+...+n)
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+
+    int sum = 0; // Initialize sum
+
+    // Loop to calculate each term in the series
+    for (int i = 1; i <= n; i++) {
+        int term_sum = 0; // Initialize sum for current term
+
+        // Calculate sum of numbers from 1 to i
+        for (int j = 1; j <= i; j++) {
+            term_sum += j;
+        }
+
+        // Add current term sum to overall sum
+        sum += term_sum;
+
+        // Display the current term
+        cout << "(";
+        for (int k = 1; k <= i; k++) {
+            cout << k;
+            if (k != i) {
+                cout << "+";
+            }
+        }
+        cout << ") ";
+
+        // Display + after each term except the last one
+        if (i != n) {
+            cout << "+ ";
+        }
+    }
+
+    // Display the total sum
+    cout << "= " << sum << endl;
+
+    return 0;
+}
+Q2.        Write a C++ program to read student  information such as rollno, name and percentage of n 
+students. Write the student information using file handling.
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+struct Student {
+    int rollNo;
+    string name;
+    double percentage;
+};
+
+void writeStudentInfoToFile(Student students[], int n) {
+    ofstream outfile("student_info.txt");
+    if (!outfile) {
+        cerr << "Error: Unable to open the file." << endl;
+        return;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        outfile << "Roll No: " << students[i].rollNo << endl;
+        outfile << "Name: " << students[i].name << endl;
+        outfile << "Percentage: " << students[i].percentage << "%" << endl;
+        outfile << endl;
+    }
+
+    outfile.close();
+    cout << "Student information has been written to student_info.txt successfully." << endl;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of students: ";
+    cin >> n;
+
+    Student students[n];
+
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter details for student " << i + 1 << ":" << endl;
+        cout << "Roll No: ";
+        cin >> students[i].rollNo;
+        cout << "Name: ";
+        cin.ignore();
+        getline(cin, students[i].name);
+        cout << "Percentage: ";
+        cin >> students[i].percentage;
+        cout << endl;
+    }
+
+    writeStudentInfoToFile(students, n);
+
+    return 0;
+}
+Q2           . Create a class called LIST with two pure virtual function store() and retrieve(). To store a 
+value call store and to retrieve call retrieves function. Derive two classes stack and queue 
+from it and override store and retrieve.
+#include <iostream>
+using namespace std;
+
+// Abstract class LIST
+class LIST {
+public:
+    // Pure virtual functions
+    virtual void store(int value) = 0;
+    virtual int retrieve() = 0;
+};
+
+// Derived class Stack from LIST
+class Stack : public LIST {
+private:
+    int stack[100];
+    int top;
+
+public:
+    Stack() {
+        top = -1;
+    }
+
+    // Override store function
+    void store(int value) {
+        if (top >= 99) {
+            cout << "Stack Overflow\n";
+            return;
+        }
+        stack[++top] = value;
+    }
+
+    // Override retrieve function
+    int retrieve() {
+        if (top < 0) {
+            cout << "Stack Underflow\n";
+            return -1;
+        }
+        return stack[top--];
+    }
+};
+
+// Derived class Queue from LIST
+class Queue : public LIST {
+private:
+    int queue[100];
+    int front, rear;
+
+public:
+    Queue() {
+        front = rear = -1;
+    }
+
+    // Override store function
+    void store(int value) {
+        if (rear >= 99) {
+            cout << "Queue Overflow\n";
+            return;
+        }
+        if (front == -1)
+            front = 0;
+        queue[++rear] = value;
+    }
+
+    // Override retrieve function
+    int retrieve() {
+        if (front == -1 || front > rear) {
+            cout << "Queue Underflow\n";
+            return -1;
+        }
+        int value = queue[front++];
+        return value;
+    }
+};
+
+int main() {
+    Stack s;
+    Queue q;
+
+    // Storing and retrieving values in Stack
+    cout << "Stack:\n";
+    s.store(1);
+    s.store(2);
+    s.store(3);
+    cout << s.retrieve() << endl;
+    cout << s.retrieve() << endl;
+    cout << s.retrieve() << endl;
+
+    // Storing and retrieving values in Queue
+    cout << "Queue:\n";
+    q.store(4);
+    q.store(5);
+    q.store(6);
+    cout << q.retrieve() << endl;
+    cout << q.retrieve() << endl;
+    cout << q.retrieve() << endl;
+
+    return 0;
+}
+slip 19  -        Q1. Write a C++ program to display factors of a number.
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void displayFactors(int num) {
+    cout << "Factors of " << num << " are: ";
+    for (int i = 1; i <= sqrt(num); ++i) {
+        if (num % i == 0) {
+            cout << i << " ";
+            if (num / i != i) {
+                cout << num / i << " ";
+            }
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int number;
+    cout << "Enter a number: ";
+    cin >> number;
+
+    displayFactors(number);
+
+    return 0;
+}
+Q2.        Design a two base classes Employee (Name, Designation) and Project(Project_Id, title). 
+Derive a class Emp_Proj(Duration) from Employee and Project. Write a menu driven 
+program to 
+a. Build a master table. 
+b. Display a master table 
+c. Display Project details in the ascending order of duration
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class Employee {
+public:
+    Employee(std::string name, std::string designation) : name(name), designation(designation) {}
+
+    std::string name;
+    std::string designation;
+};
+
+class Project {
+public:
+    Project(std::string project_id, std::string title) : project_id(project_id), title(title) {}
+
+    std::string project_id;
+    std::string title;
+};
+
+class Emp_Proj : public Employee, public Project {
+public:
+    Emp_Proj(std::string name, std::string designation, std::string project_id, std::string title, int duration)
+            : Employee(name, designation), Project(project_id, title), duration(duration) {}
+
+    int duration;
+};
+
+std::vector<Emp_Proj> master_table;
+
+void build_master_table() {
+    std::cout << "Enter Employee and Project details:\n";
+    std::string name, designation, project_id, title;
+    int duration;
+
+    std::cout << "Employee Name: ";
+    std::cin >> name;
+    std::cout << "Employee Designation: ";
+    std::cin >> designation;
+    std::cout << "Project ID: ";
+    std::cin >> project_id;
+    std::cout << "Project Title: ";
+    std::cin >> title;
+    std::cout << "Duration (in months): ";
+    std::cin >> duration;
+
+    Emp_Proj emp_proj(name, designation, project_id, title, duration);
+    master_table.push_back(emp_proj);
+    std::cout << "Employee and Project details added successfully.\n";
+}
+
+void display_master_table() {
+    std::cout << "\nMaster Table:\n";
+    std::cout << "Name\tDesignation\tProject ID\tTitle\t\tDuration\n";
+    for (const auto &emp_proj : master_table) {
+        std::cout << emp_proj.name << "\t" << emp_proj.designation << "\t" << emp_proj.project_id << "\t\t"
+                  << emp_proj.title << "\t\t" << emp_proj.duration << "\n";
+    }
+}
+
+void display_projects_by_duration() {
+    std::vector<Emp_Proj> sorted_projects = master_table;
+    std::sort(sorted_projects.begin(), sorted_projects.end(), [](const Emp_Proj &a, const Emp_Proj &b) {
+        return a.duration < b.duration;
+    });
+
+    std::cout << "\nProjects sorted by Duration:\n";
+    std::cout << "Project ID\tTitle\t\tDuration\n";
+    for (const auto &emp_proj : sorted_projects) {
+        std::cout << emp_proj.project_id << "\t\t" << emp_proj.title << "\t\t" << emp_proj.duration << "\n";
+    }
+}
+
+int main() {
+    while (true) {
+        std::cout << "\nMenu:\n";
+        std::cout << "1. Build master table\n";
+        std::cout << "2. Display master table\n";
+        std::cout << "3. Display projects by duration\n";
+        std::cout << "4. Exit\n";
+        std::cout << "Enter your choice: ";
+
+        int choice;
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                build_master_table();
+                break;
+            case 2:
+                display_master_table();
+                break;
+            case 3:
+                display_projects_by_duration();
+                break;
+            case 4:
+                std::cout << "Exiting program...\n";
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please enter a valid option.\n";
+        }
+    }
+}
+Q3 .        Write a C++ program to create a text file which stores employee information as emp_id, 
+emp_name, emp_sal). Write a menu driven program with the options 
+a. Append 
+b. Modify 
+c. Display 
+d. Exit
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+// Function to append employee information to the text file
+void appendEmployeeInfo() {
+    ofstream file("employee_info.txt", ios::app);
+    if (!file.is_open()) {
+        cout << "Error opening file!\n";
+        return;
+    }
+
+    string emp_id, emp_name;
+    double emp_sal;
+
+    cout << "Enter employee ID: ";
+    cin >> emp_id;
+    cout << "Enter employee name: ";
+    cin.ignore();
+    getline(cin, emp_name);
+    cout << "Enter employee salary: ";
+    cin >> emp_sal;
+
+    file << emp_id << ',' << emp_name << ',' << emp_sal << '\n';
+
+    cout << "Employee information added successfully.\n";
+
+    file.close();
+}
+
+// Function to modify employee information in the text file
+void modifyEmployeeInfo() {
+    string emp_id, new_emp_name, line;
+    double new_emp_sal;
+
+    cout << "Enter employee ID to modify: ";
+    cin >> emp_id;
+
+    ifstream file("employee_info.txt");
+    ofstream temp("temp.txt");
+
+    if (!file.is_open()) {
+        cout << "Error opening file!\n";
+        return;
+    }
+
+    bool found = false;
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string token;
+
+        getline(ss, token, ',');
+        if (token == emp_id) {
+            found = true;
+            cout << "Enter new employee name: ";
+            cin.ignore();
+            getline(cin, new_emp_name);
+            cout << "Enter new employee salary: ";
+            cin >> new_emp_sal;
+            temp << emp_id << ',' << new_emp_name << ',' << new_emp_sal << '\n';
+            cout << "Employee information modified successfully.\n";
+        } else {
+            temp << line << '\n';
+        }
+    }
+
+    if (!found) {
+        cout << "Employee ID not found!\n";
+    }
+
+    file.close();
+    temp.close();
+
+    remove("employee_info.txt");
+    rename("temp.txt", "employee_info.txt");
+}
+
+// Function to display all employee information from the text file
+void displayEmployeeInfo() {
+    ifstream file("employee_info.txt");
+    if (!file.is_open()) {
+        cout << "Error opening file!\n";
+        return;
+    }
+
+    string line;
+    cout << "Employee Information:\n";
+    cout << "ID\tName\tSalary\n";
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string emp_id, emp_name;
+        double emp_sal;
+
+        getline(ss, emp_id, ',');
+        getline(ss, emp_name, ',');
+        ss >> emp_sal;
+
+        cout << emp_id << '\t' << emp_name << '\t' << emp_sal << endl;
+    }
+
+    file.close();
+}
+
+int main() {
+    char choice;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "a. Append\n";
+        cout << "b. Modify\n";
+        cout << "c. Display\n";
+        cout << "d. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 'a':
+                appendEmployeeInfo();
+                break;
+            case 'b':
+                modifyEmployeeInfo();
+                break;
+            case 'c':
+                displayEmployeeInfo();
+                break;
+            case 'd':
+                cout << "Exiting program...\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 'd');
+
+    return 0;
+}
+slip 20 -        Q1.Write a C++ program to sort integer and float array elements in ascending order by using 
+function overloading
+#include <iostream>
+#include <algorithm>
+
+void sortArray(int arr[], int size) {
+    std::sort(arr, arr + size);
+}
+
+void sortArray(float arr[], int size) {
+    std::sort(arr, arr + size);
+}
+
+void printArray(int arr[], int size) {
+    std::cout << "Sorted integer array: ";
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void printArray(float arr[], int size) {
+    std::cout << "Sorted float array: ";
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int intArr[] = {5, 2, 9, 1, 3};
+    float floatArr[] = {3.5, 2.1, 7.8, 1.3, 5.2};
+
+    int intSize = sizeof(intArr) / sizeof(int);
+    int floatSize = sizeof(floatArr) / sizeof(float);
+
+    sortArray(intArr, intSize);
+    sortArray(floatArr, floatSize);
+
+    printArray(intArr, intSize);
+    printArray(floatArr, floatSize);
+
+    return 0;
+}
+Q2. Write a C++ program to create a class Department which contains data members as 
+Dept_Id, Dept_Name, H.O.D., Number_Of_staff. Write necessary member functions to 
+a. Accept details from user for ‘n’ departments and write it in a file “Dept.txt”. 
+b. Display details of department from a file.
+#include <iostream>
+#include <fstream>
+#include <sstream> // Include this header for std::stringstream
+#include <string>
+
+using namespace std;
+
+class Department {
+private:
+    string dept_id;
+    string dept_name;
+    string hod;
+    int num_staff;
+
+public:
+    // Function to accept details for 'n' departments and write to file
+    static void acceptDetails(int n) {
+        ofstream file("Dept.txt", ios::app);
+        if (!file.is_open()) {
+            cout << "Error opening file!\n";
+            return;
+        }
+
+        for (int i = 0; i < n; ++i) {
+            Department dept;
+
+            cout << "Enter details for Department " << i + 1 << ":\n";
+            cout << "Department ID: ";
+            cin >> dept.dept_id;
+            cout << "Department Name: ";
+            cin.ignore();
+            getline(cin, dept.dept_name);
+            cout << "H.O.D.: ";
+            getline(cin, dept.hod);
+            cout << "Number of Staff: ";
+            cin >> dept.num_staff;
+
+            file << dept.dept_id << ',' << dept.dept_name << ',' << dept.hod << ',' << dept.num_staff << '\n';
+        }
+
+        file.close();
+        cout << "Department details written to file successfully.\n";
+    }
+
+    // Function to display details of departments from file
+    static void displayDetailsFromFile() {
+        ifstream file("Dept.txt");
+        if (!file.is_open()) {
+            cout << "Error opening file!\n";
+            return;
+        }
+
+        string line;
+        cout << "Department Details:\n";
+        cout << "Dept_ID\tDept_Name\tH.O.D.\tNum_Staff\n";
+        while (getline(file, line)) {
+            stringstream ss(line); // Corrected line
+            string token;
+            
+            cout << line << endl;
+            while (getline(ss, token, ',')) {
+                cout << token << "\t";
+            }
+            cout << endl;
+        }
+
+        file.close();
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of departments: ";
+    cin >> n;
+
+    Department::acceptDetails(n);
+    Department::displayDetailsFromFile();
+
+    return 0;
+}
+Q2.             Write a C++ program to read the contents of a “Sample.txt” file. Store all the uppercase 
+characters in ”Upper.txt”, lowercase characters in ”Lower.txt” and digits in “Digit.txt” files. 
+Change the case of each character from “Sample.txt” and store it in “Convert.txt” file.
+#include <iostream>
+#include <fstream>
+#include <cctype>
+
+using namespace std;
+
+void separateAndConvert(const string& inputFileName) {
+    ifstream inputFile(inputFileName);
+    ofstream upperFile("Upper.txt");
+    ofstream lowerFile("Lower.txt");
+    ofstream digitFile("Digit.txt");
+    ofstream convertFile("Convert.txt");
+
+    if (!inputFile.is_open() || !upperFile.is_open() || !lowerFile.is_open() || !digitFile.is_open() || !convertFile.is_open()) {
+        cout << "Error opening files!\n";
+        return;
+    }
+
+    char ch;
+    while (inputFile.get(ch)) {
+        if (isupper(ch))
+            upperFile.put(ch);
+        else if (islower(ch))
+            lowerFile.put(ch);
+        else if (isdigit(ch))
+            digitFile.put(ch);
+
+        // Change the case of the character and store it in Convert.txt
+        if (isalpha(ch)) {
+            if (isupper(ch))
+                ch = tolower(ch);
+            else
+                ch = toupper(ch);
+        }
+        convertFile.put(ch);
+    }
+
+    inputFile.close();
+    upperFile.close();
+    lowerFile.close();
+    digitFile.close();
+    convertFile.close();
+}
+
+int main() {
+    string inputFileName = "Sample.txt";
+    separateAndConvert(inputFileName);
+    cout << "Separation and case conversion completed successfully.\n";
+    return 0;
+}
